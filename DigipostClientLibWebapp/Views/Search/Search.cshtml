@@ -1,4 +1,4 @@
-﻿@model IEnumerable<string>
+﻿@model IEnumerable<Digipost.Api.Client.Domain.Search.SearchDetails>
 
 @{
     ViewBag.Title = "Search";
@@ -7,11 +7,18 @@
 <h3>@ViewBag.Title</h3>
 
 
-@{
-    if(Model != null) { 
-        foreach (var person in Model)
-        {
-            @Html.Label(person)
-        }
+@if (Model != null)
+{
+
+    foreach (var person in Model)
+    {
+        <div>
+
+            @Html.Label(person.FirstName)
+
+            @Html.Label(person.LastName)
+        </div>
+
     }
 }
+
