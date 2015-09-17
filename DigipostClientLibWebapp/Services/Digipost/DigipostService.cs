@@ -9,6 +9,7 @@ using System.Web;
 using Digipost.Api.Client;
 using Digipost.Api.Client.Api;
 using Digipost.Api.Client.Domain.Search;
+using DigipostClientLibWebapp.Properties;
 using log4net;
 
 namespace DigipostClientLibWebapp.Services.Digipost
@@ -45,11 +46,8 @@ namespace DigipostClientLibWebapp.Services.Digipost
 
         private static DigipostClient InitClient()
         {
-            const string thumbprint = "d6 5e 6c 4c 77 fc 0e 0d c5 f5 ac 32 bc 43 70 1f a8 b0 3d 21";
-            const string senderId = "779052";
-            const string url = "https://api.digipost.no";
 
-            var config = new ClientConfig(senderId, url, 10000, false)
+            var config = new ClientConfig(Settings.Default.senderid, Settings.Default.url, Settings.Default.timeout, false)
             {
                 Logger = (severity, traceID, metode, message) =>
                 {
@@ -58,7 +56,7 @@ namespace DigipostClientLibWebapp.Services.Digipost
             };
 
 
-            _digipostClient = new DigipostClient(config, thumbprint);
+            _digipostClient = new DigipostClient(config, Settings.Default.thumbprint);
 
             return _digipostClient;
         }

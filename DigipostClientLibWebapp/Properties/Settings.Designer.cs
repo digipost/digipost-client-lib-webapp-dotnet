@@ -49,5 +49,14 @@ namespace DigipostClientLibWebapp.Properties {
                 return ((string)(this["url"]));
             }
         }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("1000")]
+        public int timeout {
+            get {
+                return ((int)(this["timeout"]));
+            }
+        }
     }
 }
