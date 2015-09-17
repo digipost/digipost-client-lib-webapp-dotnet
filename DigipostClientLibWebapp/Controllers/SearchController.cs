@@ -17,12 +17,15 @@ namespace DigipostClientLibWebapp.Controllers
         [HttpPost]
         public async Task<ActionResult> Search(string search)
         {
-            DigipostService digipostService = new DigipostService();
+            var digipostService = new DigipostService();
             var searchResult = await digipostService.Search(search);
-
-
-
+            
             return View("Index",searchResult.PersonDetails); //return Search/Search
+        }
+
+        public ActionResult Send(SearchDetails person)
+        {
+            return View("Send",person);
         }
     }
 }

@@ -1,14 +1,12 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Net.Http;
+using System.IO;
 using System.Reflection;
 using System.Threading.Tasks;
-using System.Web;
 using Digipost.Api.Client;
 using Digipost.Api.Client.Api;
+using Digipost.Api.Client.Domain.Enums;
 using Digipost.Api.Client.Domain.Search;
+using Digipost.Api.Client.Domain.SendMessage;
 using DigipostClientLibWebapp.Properties;
 using log4net;
 
@@ -38,7 +36,18 @@ namespace DigipostClientLibWebapp.Services.Digipost
 
             return result;
         }
-        
+
+        public async Task<IMessageDeliveryResult> Send(Stream fileStream,string filetype,string suject, string digipostAddress)
+        {
+            var recipient = new Recipient(IdentificationChoiceType.DigipostAddress, digipostAddress);
+
+            IMessage m = new Message(recipient,new Document(suject,filetype,fileStream));
+
+            var result = await GetClient().SendMessageAsync(m);
+
+            return result;
+        }
+
         private static DigipostClient GetClient()
         {
             return _digipostClient ?? InitClient();
@@ -62,6 +71,7 @@ namespace DigipostClientLibWebapp.Services.Digipost
         }
 
 
+        
     }
 
 }
