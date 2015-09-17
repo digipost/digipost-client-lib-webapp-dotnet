@@ -4,9 +4,15 @@ namespace DigipostClientLibWebapp.Controllers
 {
     public class SearchController : Controller
     {
-        public ActionResult Search()
+        public ActionResult Index()
         {
-            return View();
+            return View(); //return Search/Index
+        }
+
+        [HttpPost]
+        public ActionResult Search(string search)
+        {
+            return View(); //return Search/Search
         }
     }
 }
