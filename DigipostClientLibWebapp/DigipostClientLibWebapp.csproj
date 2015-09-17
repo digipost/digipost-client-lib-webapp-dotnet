@@ -44,20 +44,16 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="ApiClientShared, Version=1.0.5637.25994, Culture=neutral, PublicKeyToken=6e0e24e0c7886562, processorArchitecture=MSIL">
-      <HintPath>..\packages\digipost-api-client.6.1.5737.28313-beta\lib\net45\ApiClientShared.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="Difi.Felles.Utility, Version=0.1.5598.25086, Culture=neutral, PublicKeyToken=bd8139acc70008cb, processorArchitecture=MSIL">
-      <HintPath>..\packages\digipost-api-client.6.1.5737.28313-beta\lib\net45\Difi.Felles.Utility.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
     <Reference Include="Digipost.Api.Client, Version=6.1.5737.28313, Culture=neutral, PublicKeyToken=683b8efceae684a6, processorArchitecture=MSIL">
-      <HintPath>..\packages\digipost-api-client.6.1.5737.28313-beta\lib\net45\Digipost.Api.Client.dll</HintPath>
-      <Private>True</Private>
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>Bin\Digipost.Api.Client.dll</HintPath>
     </Reference>
     <Reference Include="Digipost.Api.Client.Domain, Version=6.1.5737.28312, Culture=neutral, PublicKeyToken=683b8efceae684a6, processorArchitecture=MSIL">
-      <HintPath>..\packages\digipost-api-client.6.1.5737.28313-beta\lib\net45\Digipost.Api.Client.Domain.dll</HintPath>
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>Bin\Digipost.Api.Client.Domain.dll</HintPath>
+    </Reference>
+    <Reference Include="log4net, Version=1.2.13.0, Culture=neutral, PublicKeyToken=669e0ddf0bb1aa2a, processorArchitecture=MSIL">
+      <HintPath>..\packages\log4net.2.0.3\lib\net40-full\log4net.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Microsoft.CodeDom.Providers.DotNetCompilerPlatform, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
@@ -187,6 +183,12 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+      <DependentUpon>Settings.settings</DependentUpon>
+    </Compile>
+    <Compile Include="Services\Digipost\DigipostService.cs" />
     <Compile Include="Startup.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -198,6 +200,10 @@
     <Content Include="Content\Site.css" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />
     <Content Include="Scripts\jquery-1.10.2.min.js" />

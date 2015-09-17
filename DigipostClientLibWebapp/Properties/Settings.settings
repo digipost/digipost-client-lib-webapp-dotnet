@@ -1,0 +1,15 @@
+﻿<?xml version='1.0' encoding='utf-8'?>
+<SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="DigipostClientLibWebapp.Properties" GeneratedClassName="Settings">
+  <Profiles />
+  <Settings>
+    <Setting Name="thumbprint" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">d6 5e 6c 4c 77 fc 0e 0d c5 f5 ac 32 bc 43 70 1f a8 b0 3d 21</Value>
+    </Setting>
+    <Setting Name="senderid" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">779052</Value>
+    </Setting>
+    <Setting Name="url" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">https://api.digipost.no</Value>
+    </Setting>
+  </Settings>
+</SettingsFile>
