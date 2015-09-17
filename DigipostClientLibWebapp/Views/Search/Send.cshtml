@@ -1,0 +1,23 @@
+﻿@model Digipost.Api.Client.Domain.Search.SearchDetails
+
+@{
+    ViewBag.Title = "Send";
+}
+
+<h2>@ViewBag.Title</h2>
+
+<div>
+    <h4>@Html.LabelForModel(Model.FirstName)&nbsp;@Html.LabelForModel(Model.MiddleName)&nbsp;@Html.LabelForModel(Model.LastName)</h4>
+    <div>@Html.LabelForModel(Model.MobileNumber)</div>
+    <address>@Html.LabelForModel(Model.DigipostAddress)</address>
+</div>
+
+<div>
+    @using (Html.BeginForm("Send", "Send", FormMethod.Post, new { enctype = "multipart/form-data" }))
+    {
+        @Html.Hidden("digipostaddress",Model.DigipostAddress)
+        @Html.TextBox("subject")
+        <input type="file" name="FileUpload" />
+        <input type="submit" name="Submit" id="Submit" value="Send" />
+    }
+</div>
