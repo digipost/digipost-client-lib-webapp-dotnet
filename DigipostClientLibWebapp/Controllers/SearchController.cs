@@ -1,18 +1,23 @@
-﻿using System.Web.Mvc;
+﻿using System.Collections.Generic;
+using System.Web.Mvc;
 
 namespace DigipostClientLibWebapp.Controllers
 {
     public class SearchController : Controller
     {
-        public ActionResult Index()
+       
+        public ActionResult Index(List<string> search)
         {
-            return View(); //return Search/Index
+            return View(search); //return Search/Index
         }
 
         [HttpPost]
         public ActionResult Search(string search)
         {
-            return View(); //return Search/Search
+            List<string> stringList = new List<string>();
+            stringList.Add(search);
+
+            return View("Index",stringList); //return Search/Search
         }
     }
 }

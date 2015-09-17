@@ -1,8 +1,17 @@
-﻿@model dynamic
+﻿@model IEnumerable<string>
 
 @{
-    ViewBag.Title = "title";
+    ViewBag.Title = "Search";
 }
 
+<h3>@ViewBag.Title</h3>
 
 
+@{
+    if(Model != null) { 
+        foreach (var person in Model)
+        {
+            @Html.Label(person)
+        }
+    }
+}
