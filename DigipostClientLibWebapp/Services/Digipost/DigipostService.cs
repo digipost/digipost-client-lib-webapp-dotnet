@@ -37,11 +37,12 @@ namespace DigipostClientLibWebapp.Services.Digipost
             return result;
         }
 
-        public async Task<IMessageDeliveryResult> Send(Stream fileStream,string filetype,string suject, string digipostAddress)
+        public async Task<IMessageDeliveryResult> Send(byte[] fileContent,string filetype,string suject, string digipostAddress)
         {
-            var recipient = new Recipient(IdentificationChoiceType.DigipostAddress, digipostAddress);
-
-            IMessage m = new Message(recipient,new Document(suject,filetype,fileStream));
+            var recipient = new Recipient(IdentificationChoiceType.DigipostAddress,digipostAddress);
+            var primaryDocument = new Document(suject,filetype,fileContent);
+            
+            IMessage m = new Message(recipient,primaryDocument);
 
             var result = await GetClient().SendMessageAsync(m);
 
