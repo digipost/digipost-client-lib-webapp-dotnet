@@ -232,7 +232,7 @@
     <Content Include="Views\Shared\Lockout.cshtml" />
     <Content Include="Views\Search\Search.cshtml" />
     <Content Include="Views\Search\Index.cshtml" />
-    <Content Include="Views\Search\Send.cshtml" />
+    <Content Include="Views\Send\Send.cshtml" />
     <Content Include="Views\Send\SendStatus.cshtml" />
   </ItemGroup>
   <ItemGroup>
