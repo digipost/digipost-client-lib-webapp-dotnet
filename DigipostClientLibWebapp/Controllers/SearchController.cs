@@ -11,6 +11,9 @@ namespace DigipostClientLibWebapp.Controllers
        
         public ActionResult Index(List<SearchDetails> search)
         {
+            if (search == null)
+                return View();
+
             return View(search); //return Search/Index
         }
 
@@ -18,14 +21,23 @@ namespace DigipostClientLibWebapp.Controllers
         public async Task<ActionResult> Search(string search)
         {
             var digipostService = new DigipostService();
-            var searchResult = await digipostService.Search(search);
-            
+            ISearchDetailsResult searchResult = await digipostService.Search(search);
+
+            Session["PersonDetails"] = searchResult;
+
             return View("Index",searchResult.PersonDetails); //return Search/Search
         }
 
-        public ActionResult Send(SearchDetails person)
+
+        public ActionResult Send(string digipostAddress)
         {
-            return View("Send",person);
+
+            ISearchDetailsResult personDetails =(ISearchDetailsResult) Session["PersonDetails"];
+
+            var person = personDetails.PersonDetails.Find(details => details.DigipostAddress.Equals(digipostAddress));
+
+            return View("../Send/Send", person);
+            
         }
     }
 }

@@ -1,10 +1,14 @@
 ﻿@model Digipost.Api.Client.Domain.SendMessage.IMessageDeliveryResult
 
 @{
-    ViewBag.Title = "title";
+    ViewBag.Title = "Delivery result";
 }
 
-<h2>title</h2>
+<h2>@ViewBag.Title</h2>
 
 
-<h3>@Html.LabelForModel(Model.Status.ToString())</h3>
+<h3>@Html.LabelFor(m => Model.Status) : @Html.LabelForModel(Model.Status.ToString())</h3>
+<div>
+    <p>@Html.LabelFor(m => Model.DeliveryMethod) : @Html.LabelForModel(Model.DeliveryMethod.ToString())</p>
+    <p>@Html.LabelFor(m => Model.DeliveryTime) : @Html.LabelForModel(Model.DeliveryTime.ToString())</p>
+</div>

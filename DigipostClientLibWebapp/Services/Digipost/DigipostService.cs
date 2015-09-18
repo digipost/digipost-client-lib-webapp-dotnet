@@ -37,17 +37,25 @@ namespace DigipostClientLibWebapp.Services.Digipost
             return result;
         }
 
-        public async Task<IMessageDeliveryResult> Send(byte[] fileContent,string filetype,string suject, string digipostAddress)
+        public async Task<IMessageDeliveryResult> Send(byte[] fileContent, string filetype, string suject, string digipostAddress, SensitivityLevel sensitivityOption,AuthenticationLevel authenticationOption, bool smsAfterHour, string smsAfterHours)
         {
-            var recipient = new Recipient(IdentificationChoiceType.DigipostAddress,digipostAddress);
-            var primaryDocument = new Document(suject,filetype,fileContent);
-            
-            IMessage m = new Message(recipient,primaryDocument);
+            var recipient = new Recipient(IdentificationChoiceType.DigipostAddress, digipostAddress);
+
+            var primaryDocument = new Document(suject, filetype, fileContent);
+            primaryDocument.SensitivityLevel = sensitivityOption;
+            primaryDocument.AuthenticationLevel = authenticationOption;
+            if (smsAfterHour)
+                primaryDocument.SmsNotification = new SmsNotification(Int32.Parse(smsAfterHours));
+
+            IMessage m = new Message(recipient, primaryDocument);
+
 
             var result = await GetClient().SendMessageAsync(m);
 
             return result;
         }
+
+
 
         private static DigipostClient GetClient()
         {
@@ -72,7 +80,7 @@ namespace DigipostClientLibWebapp.Services.Digipost
         }
 
 
-        
+
     }
 
 }

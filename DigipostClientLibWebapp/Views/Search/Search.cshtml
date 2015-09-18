@@ -1,31 +1,32 @@
-﻿@model List<Digipost.Api.Client.Domain.Search.SearchDetails>
+﻿@using System.Activities.Expressions
+@using Digipost.Api.Client.Domain.Search
+@model List<Digipost.Api.Client.Domain.Search.SearchDetails>
 
 @{
     ViewBag.Title = "Search";
 }
 
-<h3>@ViewBag.Title</h3>
 
 
 @if (Model != null)
 {
     <table class="table">
         <thead>
-        <tr>
-            <td>@Html.LabelFor(m => Model[0].FirstName)</td>
-            <td>@Html.LabelFor(m => Model[0].MiddleName)</td>
-            <td>@Html.LabelFor(m => Model[0].LastName)</td>
-            <td>@Html.LabelFor(m => Model[0].DigipostAddress)</td>
-            <td>@Html.LabelFor(m => Model[0].MobileNumber)</td>
-            <td>@Html.LabelFor(m => Model[0].OrganizationName)</td>
-            <td>@Html.LabelFor(m => Model[0].SearchDetailsAddress)</td>
-            <td> </td>
-        </tr>
+            <tr>
+                <td>@Html.LabelFor(m => Model[0].FirstName)</td>
+                <td>@Html.LabelFor(m => Model[0].MiddleName)</td>
+                <td>@Html.LabelFor(m => Model[0].LastName)</td>
+                <td>@Html.LabelFor(m => Model[0].DigipostAddress)</td>
+                <td>@Html.LabelFor(m => Model[0].MobileNumber)</td>
+                <td>@Html.LabelFor(m => Model[0].OrganizationName)</td>
+                <td>@Html.LabelFor(m => Model[0].SearchDetailsAddress)</td>
+                <td> </td>
+            </tr>
         </thead>
 
         <tbody>
             @foreach (var person in Model)
-            {
+                {
                 <tr>
                     <td>@Html.Label(person.FirstName)</td>
                     <td>@Html.Label(person.MiddleName)</td>
@@ -33,11 +34,15 @@
                     <td>@Html.Label(person.DigipostAddress)</td>
                     <td>@Html.Label(person.MobileNumber)</td>
                     <td>@Html.Label(person.OrganizationName)</td>
-                    <td>@Html.Label(person.SearchDetailsAddress.ToString())</td>
-                    <td>@Html.ActionLink("Send","Send",person)</td>
+                    <td>
+                        @if (person.SearchDetailsAddress != null)
+                        {
+                            @Html.Label(person.SearchDetailsAddress.ToString())
+                        }
+                    </td>
+                    <td>@Html.ActionLink(linkText: "Send", actionName: "Send", routeValues: new{person.DigipostAddress})</td>
                 </tr>
             }
         </tbody>
     </table>
 }
-
