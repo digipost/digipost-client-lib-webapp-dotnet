@@ -1,6 +1,6 @@
 ﻿@using Digipost.Api.Client.Domain.Enums
 @using Microsoft.Ajax.Utilities
-@model Digipost.Api.Client.Domain.Search.SearchDetails
+@model DigipostClientLibWebapp.Models.SendModel
 
 @{
     ViewBag.Title = "Send";
@@ -9,67 +9,39 @@
 <h2>@ViewBag.Title</h2>
 
 <div class="jumbotron">
-    <h3>@Html.LabelForModel(Model.FirstName)&nbsp;@Html.LabelForModel(Model.MiddleName)&nbsp;@Html.LabelForModel(Model.LastName)</h3>
-    <div>@Html.LabelFor(m => Model.MobileNumber) : @Html.LabelForModel(Model.MobileNumber)</div>
+    <h3>@Html.LabelForModel(Model.SearchDetails.FirstName)&nbsp;@Html.LabelForModel(Model.SearchDetails.MiddleName)&nbsp;@Html.LabelForModel(Model.SearchDetails.LastName)</h3>
+    <div>@Html.LabelFor(m => Model.SearchDetails.MobileNumber) : @Html.LabelForModel(Model.SearchDetails.MobileNumber)</div>
     <div>
-        @Html.LabelFor(m => Model.DigipostAddress) : @Html.LabelForModel(Model.DigipostAddress) <br />
-        @if (Model.SearchDetailsAddress != null)
+        @Html.LabelFor(m => Model.SearchDetails.DigipostAddress) : @Html.LabelForModel(Model.SearchDetails.DigipostAddress) <br />
+        @if (Model.SearchDetails.SearchDetailsAddress != null)
         {
-            if (Model.SearchDetailsAddress.City != null)
+            if (Model.SearchDetails.SearchDetailsAddress.City != null)
             {
-                <p> @Html.LabelFor(m => Model.SearchDetailsAddress.City) : @Html.LabelForModel(Model?.SearchDetailsAddress?.City) <br /></p>
+                <p> @Html.LabelFor(m => Model.SearchDetails.SearchDetailsAddress.City) : @Html.LabelForModel(Model.SearchDetails.SearchDetailsAddress.City) <br /></p>
             }
-            if (Model.SearchDetailsAddress.ZipCode != null)
+            if (Model.SearchDetails.SearchDetailsAddress.ZipCode != null)
             {
-                <p> @Html.LabelFor(m => Model.SearchDetailsAddress.ZipCode) : @Html.LabelForModel(Model?.SearchDetailsAddress?.ZipCode) <br /></p>
+                <p> @Html.LabelFor(m => Model.SearchDetails.SearchDetailsAddress.ZipCode) : @Html.LabelForModel(Model.SearchDetails.SearchDetailsAddress.ZipCode) <br /></p>
             }
-            if (Model.SearchDetailsAddress.Street != null)
+            if (Model.SearchDetails.SearchDetailsAddress.Street != null)
             {
-                <p> @Html.LabelFor(m => Model.SearchDetailsAddress.Street) : @Html.LabelForModel(Model?.SearchDetailsAddress?.Street) <br /></p>
+                <p> @Html.LabelFor(m => Model.SearchDetails.SearchDetailsAddress.Street) : @Html.LabelForModel(Model.SearchDetails.SearchDetailsAddress.Street) <br /></p>
             }
-            if (Model.SearchDetailsAddress.HouseNumber != null)
+            if (Model.SearchDetails.SearchDetailsAddress.HouseNumber != null)
             {
-                <p> @Html.LabelFor(m => Model.SearchDetailsAddress.HouseNumber) : @Html.LabelForModel(Model?.SearchDetailsAddress?.HouseNumber) <br /></p>
+                <p> @Html.LabelFor(m => Model.SearchDetails.SearchDetailsAddress.HouseNumber) : @Html.LabelForModel(Model.SearchDetails.SearchDetailsAddress.HouseNumber) <br /></p>
             }
-            if (!Model.SearchDetailsAddress.AdditionalAddressLine.IsNullOrWhiteSpace())
+            if (!Model.SearchDetails.SearchDetailsAddress.AdditionalAddressLine.IsNullOrWhiteSpace())
             {
-                <p> @Html.LabelFor(m => Model.SearchDetailsAddress.AdditionalAddressLine) : @Html.LabelForModel(Model?.SearchDetailsAddress?.AdditionalAddressLine) <br /></p>
+                <p> @Html.LabelFor(m => Model.SearchDetails.SearchDetailsAddress.AdditionalAddressLine) : @Html.LabelForModel(Model.SearchDetails.SearchDetailsAddress.AdditionalAddressLine) <br /></p>
             }
-            if (Model.SearchDetailsAddress.HouseLetter != null)
+            if (Model.SearchDetails.SearchDetailsAddress.HouseLetter != null)
             {
-                <p> @Html.LabelFor(m => Model.SearchDetailsAddress.HouseLetter) : @Html.LabelForModel(Model?.SearchDetailsAddress?.HouseLetter) <br /></p>
+                <p> @Html.LabelFor(m => Model.SearchDetails.SearchDetailsAddress.HouseLetter) : @Html.LabelForModel(Model.SearchDetails.SearchDetailsAddress.HouseLetter) <br /></p>
             }
 
         }
     </div>
 </div>
 
-
-<div>
-    @using (Html.BeginForm("Send", "Send", FormMethod.Post, new { enctype = "multipart/form-data" }))
-    {
-        @Html.Hidden("digipostaddress", Model.DigipostAddress)
-        <p>@Html.Label("Subject") &nbsp; @Html.TextBox("subject")</p>
-        <input type="file" name="FileUpload" />
-        <input type="submit" name="Submit" id="Submit" value="Send"/>
-        <table>
-            <thead>
-            <tr><td>Additional options</td><td></td></tr>
-            </thead>
-            <tbody>
-            <tr><td>Sms notification</td><td>@Html.CheckBox("smsAfterHour") @Html.TextBox("smsAfterHours")</td></tr>
-            <tr><td>Sensitivity option</td><td>
-                @Html.RadioButton("sensitivityOption", SensitivityLevel.Normal, true) Normal
-                @Html.RadioButton("sensitivityOption", SensitivityLevel.Sensitive) Sensitive
-            </td></tr>
-                <tr>
-                    <td>Authentication option</td>
-                    <td>
-                        @Html.RadioButton("authenticationOption", AuthenticationLevel.Password, true) Password
-                        @Html.RadioButton("authenticationOption", AuthenticationLevel.TwoFactor) TwoFactor
-                    </td>
-                </tr>
-            </tbody>
-        </table>
-    }
-</div>
+@Html.Partial(partialViewName: "SendPartial")

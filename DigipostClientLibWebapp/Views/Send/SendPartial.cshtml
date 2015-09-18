@@ -1,0 +1,43 @@
+﻿@using Digipost.Api.Client.Domain.Enums
+@model DigipostClientLibWebapp.Models.SendModel
+
+
+@Html.ValidationSummary("Create was unsuccessful. Please correct the errors and try again.")
+
+<div>
+    @using (Html.BeginForm(actionName: "Send", controllerName: "Send", method: FormMethod.Post, htmlAttributes: new { enctype = "multipart/form-data" }))
+    {
+        @Html.Hidden("digipostaddress", Model.SearchDetails.DigipostAddress)
+
+        <p>@Html.LabelFor(m=>Model.Subject) &nbsp; @Html.TextBoxFor(m => Model.Subject)</p>
+        @Html.ValidationMessageFor(m => Model.Subject, "*")
+
+        <input type="file" name="@Model.FileCollection"/>
+        
+        @Html.ValidationMessageFor(m => Model.FileCollection, "*")
+        <table>
+            <thead>
+                <tr><td>Additional options</td><td></td></tr>
+            </thead>
+            <tbody>
+                <tr><td>Sms notification</td><td>@Html.CheckBox("smsAfterHour") @Html.TextBox("smsAfterHours")</td></tr>
+                <tr>
+                    <td>Sensitivity option</td>
+                    <td>
+                        @Html.RadioButton("sensitivityOption", SensitivityLevel.Normal, true) Normal
+                        @Html.RadioButton("sensitivityOption", SensitivityLevel.Sensitive) Sensitive
+                    </td>
+                </tr>
+                <tr>
+                    <td>Authentication option</td>
+                    <td>
+                        @Html.RadioButton("authenticationOption", AuthenticationLevel.Password, true) Password
+                        @Html.RadioButton("authenticationOption", AuthenticationLevel.TwoFactor) TwoFactor
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+
+        <input type="submit" name="Submit" id="Submit" value="Send" />
+    }
+</div>

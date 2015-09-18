@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using System.Web.Mvc;
 using Digipost.Api.Client.Domain.Search;
+using DigipostClientLibWebapp.Models;
 using DigipostClientLibWebapp.Services.Digipost;
 
 namespace DigipostClientLibWebapp.Controllers
@@ -28,16 +29,17 @@ namespace DigipostClientLibWebapp.Controllers
             return View("Index",searchResult.PersonDetails); //return Search/Search
         }
 
-
-        public ActionResult Send(string digipostAddress)
+        public ActionResult GoToSend(string digipostAddress)
         {
 
-            ISearchDetailsResult personDetails =(ISearchDetailsResult) Session["PersonDetails"];
+            ISearchDetailsResult personDetails = (ISearchDetailsResult)Session["PersonDetails"];
 
             var person = personDetails.PersonDetails.Find(details => details.DigipostAddress.Equals(digipostAddress));
 
-            return View("../Send/Send", person);
-            
+            SendModel model = new SendModel { SearchDetails = person };
+            Session["sendModel"] = model;
+            return RedirectToAction("Index", "Send");
         }
+
     }
 }
