@@ -1,0 +1,82 @@
+﻿@using System.Web.Mvc.Html
+@using Digipost.Api.Client.Domain.Enums
+@using Microsoft.Ajax.Utilities
+@model DigipostClientLibWebapp.Models.SendModel
+
+@{
+    ViewBag.Title = "Send";
+}
+
+<h2>@ViewBag.Title</h2>
+
+<div class="jumbotron">
+    <h3>@Html.LabelForModel(Model.FirstName)&nbsp;@Html.LabelForModel(Model.MiddleName)&nbsp;@Html.LabelForModel(Model.LastName)</h3>
+    <div>@Html.LabelFor(m => Model.MobileNumber) : @Html.LabelForModel(Model.MobileNumber)</div>
+    <div>
+        @Html.LabelFor(m => Model.DigipostAddress) : @Html.LabelForModel(Model.DigipostAddress) <br />
+        
+            @if (Model.City != null)
+            {
+                <p> @Html.LabelFor(m => Model.City) : @Html.LabelForModel(Model.City) <br /></p>
+            }
+            @if (Model.ZipCode != null)
+            {
+                <p> @Html.LabelFor(m => Model.ZipCode) : @Html.LabelForModel(Model.ZipCode) <br /></p>
+            }
+            @if (Model.Street != null)
+            {
+                <p> @Html.LabelFor(m => Model.Street) : @Html.LabelForModel(Model.Street) <br /></p>
+            }
+            @if (Model.HouseNumber != null)
+            {
+                <p> @Html.LabelFor(m => Model.HouseNumber) : @Html.LabelForModel(Model.HouseNumber) <br /></p>
+            }
+            @if (!Model.AdditionalAddressLine.IsNullOrWhiteSpace())
+            {
+                <p> @Html.LabelFor(m => Model.AdditionalAddressLine) : @Html.LabelForModel(Model.AdditionalAddressLine) <br /></p>
+            }
+            @if (Model.HouseLetter != null)
+            {
+                <p> @Html.LabelFor(m => Model.HouseLetter) : @Html.LabelForModel(Model.HouseLetter) <br /></p>
+            }
+
+        
+        
+    </div>
+</div>
+
+
+<div>
+    @using (Html.BeginForm(actionName: "Send", controllerName: "Send", method: FormMethod.Post, htmlAttributes: new { enctype = "multipart/form-data" }))
+    {
+        @Html.Hidden("digipostaddress", Model.DigipostAddress)
+        <p>@Html.Label("Subject") &nbsp; @Html.TextBox("subject")</p>
+
+        <input type="file" name="FileUpload" />
+        
+        <table>
+            <thead>
+                <tr><td>Additional options</td><td></td></tr>
+            </thead>
+            <tbody>
+                <tr><td>Sms notification</td><td>@Html.CheckBoxFor(m => Model.SmsAfterHour) @Html.TextBoxFor(m => Model.SmsAfterHours)</td></tr>
+                <tr>
+                    <td>Sensitivity option</td>
+                    <td>
+                        @Html.RadioButton("sensitivityOption", SensitivityLevel.Normal, true) Normal
+                        @Html.RadioButton("sensitivityOption", SensitivityLevel.Sensitive) Sensitive
+                    </td>
+                </tr>
+                <tr>
+                    <td>Authentication option</td>
+                    <td>
+                        @Html.RadioButton("authenticationOption", AuthenticationLevel.Password, true) Password
+                        @Html.RadioButton("authenticationOption", AuthenticationLevel.TwoFactor) TwoFactor
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+
+        <input type="submit" name="Submit" id="Submit" value="Send" />
+    }
+</div>

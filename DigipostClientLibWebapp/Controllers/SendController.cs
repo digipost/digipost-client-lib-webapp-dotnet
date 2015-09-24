@@ -13,27 +13,44 @@ namespace DigipostClientLibWebapp.Controllers
 {
     public class SendController : Controller
     {
-
+        
         [HttpGet]
         public ActionResult Index()
         {
+            
+            var searchDetails = (SearchDetails)Session["personModel"];
+            var sendModel = new SendModel();
+            if(searchDetails.SearchDetailsAddress != null) { 
+                sendModel.AdditionalAddressLine = searchDetails.SearchDetailsAddress.AdditionalAddressLine;
+                sendModel.City = searchDetails.SearchDetailsAddress.City;
+                sendModel.HouseLetter = searchDetails.SearchDetailsAddress.HouseLetter;
+                sendModel.HouseNumber = searchDetails.SearchDetailsAddress.HouseNumber;
+                sendModel.Street = searchDetails.SearchDetailsAddress.Street;
+                sendModel.ZipCode = searchDetails.SearchDetailsAddress.ZipCode;
+            }
+            sendModel.DigipostAddress = searchDetails.DigipostAddress;
+            sendModel.FirstName = searchDetails.FirstName;
+            sendModel.MiddleName = searchDetails.MiddleName;
+            sendModel.LastName = searchDetails.LastName;
+            sendModel.MobileNumber = searchDetails.MobileNumber;
+            sendModel.OrganizationName = searchDetails.OrganizationName;
+            
 
-            SendModel sendModel =(SendModel) Session["sendModel"];
 
-            return View("Send", sendModel);
+            return View("Index",sendModel);
         }
+        
 
-       
         [HttpPost]
-        public async Task<ActionResult> Send(SendModel sendModel)//(string subject, string digipostAddress, SensitivityLevel sensitivityOption, AuthenticationLevel authenticationOption, bool smsAfterHour, string smsAfterHours)
+        public async Task<ActionResult> Send(SendModel sendModel)
         {
             var digipostService = new DigipostService();
 
             byte[] fileContent = null;
-            var httpPostedFileBase = sendModel.FileCollection;// Request.Files[0];
+            var httpPostedFileBase = Request.Files[0];
 
             if (httpPostedFileBase == null || httpPostedFileBase.ContentLength == 0)
-                return View();
+                return View("Index",sendModel);
 
             using (var binaryReader = new BinaryReader(httpPostedFileBase.InputStream))
             {
@@ -41,8 +58,8 @@ namespace DigipostClientLibWebapp.Controllers
             }
             var fileType = mapToDigipostFileType(httpPostedFileBase.ContentType);
 
-            //var result = await digipostService.Send(fileContent,fileType,sendModel.Subject,sendModel.SearchDetails.DigipostAddress) //(fileContent, fileType, subject, digipostAddress, sensitivityOption, authenticationOption, smsAfterHour, smsAfterHours);
-            string result = null;
+            var result = await digipostService.Send(fileContent, fileType, sendModel.Subject , sendModel.DigipostAddress, sendModel.SensitivityOption, sendModel.AuthenticationOption, sendModel.SmsAfterHour, sendModel.SmsAfterHours);
+            
             return View("SendStatus", result);
         }
 

@@ -38,7 +38,8 @@
                             @Html.Label(person.SearchDetailsAddress.ToString())
                         }
                     </td>
-                    <td>@Html.ActionLink("Send","GoToSend",new {person.DigipostAddress})</td>                    
+                    
+                   <td>@Html.ActionLink("Send", "GoToSend", new { person.DigipostAddress })</td>
                 </tr>
             }
         </tbody>

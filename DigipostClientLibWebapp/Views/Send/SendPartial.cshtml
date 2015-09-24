@@ -2,19 +2,14 @@
 @model DigipostClientLibWebapp.Models.SendModel
 
 
-@Html.ValidationSummary("Create was unsuccessful. Please correct the errors and try again.")
-
 <div>
     @using (Html.BeginForm(actionName: "Send", controllerName: "Send", method: FormMethod.Post, htmlAttributes: new { enctype = "multipart/form-data" }))
     {
-        @Html.Hidden("digipostaddress", Model.SearchDetails.DigipostAddress)
+        @Html.Hidden("digipostaddress", Model.DigipostAddress)
+        <p>@Html.Label("Subject") &nbsp; @Html.TextBox("subject")</p>
 
-        <p>@Html.LabelFor(m=>Model.Subject) &nbsp; @Html.TextBoxFor(m => Model.Subject)</p>
-        @Html.ValidationMessageFor(m => Model.Subject, "*")
+        <input type="file" name="FileUpload" />
 
-        <input type="file" name="@Model.FileCollection"/>
-        
-        @Html.ValidationMessageFor(m => Model.FileCollection, "*")
         <table>
             <thead>
                 <tr><td>Additional options</td><td></td></tr>
