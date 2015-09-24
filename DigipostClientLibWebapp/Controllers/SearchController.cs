@@ -36,23 +36,6 @@ namespace DigipostClientLibWebapp.Controllers
 
             var person = personDetails.PersonDetails.Find(details => details.DigipostAddress.Equals(digipostAddress));
 
-            SendModel sendModel = new SendModel();
-            if (person.SearchDetailsAddress != null)
-            {
-                sendModel.AdditionalAddressLine = person.SearchDetailsAddress.AdditionalAddressLine;
-                sendModel.City = person.SearchDetailsAddress.City;
-                sendModel.HouseLetter = person.SearchDetailsAddress.HouseLetter;
-                sendModel.HouseNumber = person.SearchDetailsAddress.HouseNumber;
-                sendModel.Street = person.SearchDetailsAddress.Street;
-                sendModel.ZipCode = person.SearchDetailsAddress.ZipCode;
-            }
-            sendModel.DigipostAddress = person.DigipostAddress;
-            sendModel.FirstName = person.FirstName;
-            sendModel.MiddleName = person.MiddleName;
-            sendModel.LastName = person.LastName;
-            sendModel.MobileNumber = person.MobileNumber;
-            sendModel.OrganizationName = person.OrganizationName;
-
             Session["personModel"] = person;
             return RedirectToAction("Index", "Send");
         }
