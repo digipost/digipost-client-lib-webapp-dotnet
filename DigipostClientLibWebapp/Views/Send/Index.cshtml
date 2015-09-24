@@ -9,51 +9,75 @@
 
 <h2>@ViewBag.Title</h2>
 
-<div class="jumbotron">
-    <h3>@Html.LabelForModel(Model.FirstName)&nbsp;@Html.LabelForModel(Model.MiddleName)&nbsp;@Html.LabelForModel(Model.LastName)</h3>
-    <div>@Html.LabelFor(m => Model.MobileNumber) : @Html.LabelForModel(Model.MobileNumber)</div>
-    <div>
-        @Html.LabelFor(m => Model.DigipostAddress) : @Html.LabelForModel(Model.DigipostAddress) <br />
-        
+@using (Html.BeginForm(actionName: "Send", controllerName: "Send", method: FormMethod.Post, htmlAttributes: new { enctype = "multipart/form-data" }))
+{
+    <div class="jumbotron">
+        @if (Model.FirstName != null)
+        {
+            <h3>@Html.LabelFor(m => Model.FirstName)&nbsp;@Html.LabelForModel(Model.MiddleName)&nbsp;@Html.LabelForModel(Model.LastName)</h3>
+            @Html.HiddenFor(m => Model.FirstName)
+            @Html.HiddenFor(m => Model.MiddleName)
+            @Html.HiddenFor(m => Model.LastName)
+            }
+        @if (Model.MobileNumber != null) {
+            <div>@Html.LabelFor(m => Model.MobileNumber) : @Html.LabelForModel(Model.MobileNumber)</div>
+            @Html.HiddenFor(m => Model.MobileNumber)
+        }
+        <div>
+            @if(Model.DigipostAddress != null) {
+                <p> @Html.LabelFor(m => Model.DigipostAddress) : @Html.LabelForModel(Model.DigipostAddress) <br/>
+                </p>
+                @Html.HiddenFor(m => Model.DigipostAddress)
+            }
+            else
+            {
+                <p>@Html.LabelFor(m => Model.DigipostAddress) : @Html.TextBoxFor(m => Model.DigipostAddress)</p>
+            }
             @if (Model.City != null)
             {
-                <p> @Html.LabelFor(m => Model.City) : @Html.LabelForModel(Model.City) <br /></p>
+                <p> @Html.LabelFor(m => Model.City) : @Html.LabelForModel(Model.City) <br/>
+                </p>
+                @Html.HiddenFor(m => Model.City)
             }
             @if (Model.ZipCode != null)
             {
-                <p> @Html.LabelFor(m => Model.ZipCode) : @Html.LabelForModel(Model.ZipCode) <br /></p>
+                <p> @Html.LabelFor(m => Model.ZipCode) : @Html.LabelForModel(Model.ZipCode) <br/>
+                </p>
+                @Html.HiddenFor(m => Model.ZipCode)
             }
             @if (Model.Street != null)
             {
-                <p> @Html.LabelFor(m => Model.Street) : @Html.LabelForModel(Model.Street) <br /></p>
+                <p> @Html.LabelFor(m => Model.Street) : @Html.LabelForModel(Model.Street) <br/>
+                </p>
+                @Html.HiddenFor(m => Model.Street)
             }
             @if (Model.HouseNumber != null)
             {
-                <p> @Html.LabelFor(m => Model.HouseNumber) : @Html.LabelForModel(Model.HouseNumber) <br /></p>
+                <p> @Html.LabelFor(m => Model.HouseNumber) : @Html.LabelForModel(Model.HouseNumber) <br/>
+                </p>
+                @Html.HiddenFor(m => Model.HouseNumber)
             }
             @if (!Model.AdditionalAddressLine.IsNullOrWhiteSpace())
             {
-                <p> @Html.LabelFor(m => Model.AdditionalAddressLine) : @Html.LabelForModel(Model.AdditionalAddressLine) <br /></p>
+                <p> @Html.LabelFor(m => Model.AdditionalAddressLine) : @Html.LabelForModel(Model.AdditionalAddressLine) <br/>
+                </p>
+                @Html.HiddenFor(m => Model.AdditionalAddressLine)
             }
             @if (Model.HouseLetter != null)
             {
-                <p> @Html.LabelFor(m => Model.HouseLetter) : @Html.LabelForModel(Model.HouseLetter) <br /></p>
+                <p> @Html.LabelFor(m => Model.HouseLetter) : @Html.LabelForModel(Model.HouseLetter) <br/>
+                </p>
+                @Html.HiddenFor(m => Model.HouseLetter)
             }
 
-        
-        
+        </div>
     </div>
-</div>
 
 
-<div>
-    @using (Html.BeginForm(actionName: "Send", controllerName: "Send", method: FormMethod.Post, htmlAttributes: new { enctype = "multipart/form-data" }))
-    {
-        @Html.Hidden("digipostaddress", Model.DigipostAddress)
-        <p>@Html.Label("Subject") &nbsp; @Html.TextBox("subject")</p>
+    <div>
+        <p>@Html.LabelFor(m => Model.Subject) &nbsp; @Html.TextBoxFor(m=>  Model.Subject)</p>
 
-        <input type="file" name="FileUpload" />
-        
+        <input type="file" name="Model.FileCollection" />
         <table>
             <thead>
                 <tr><td>Additional options</td><td></td></tr>
@@ -63,20 +87,21 @@
                 <tr>
                     <td>Sensitivity option</td>
                     <td>
-                        @Html.RadioButton("sensitivityOption", SensitivityLevel.Normal, true) Normal
-                        @Html.RadioButton("sensitivityOption", SensitivityLevel.Sensitive) Sensitive
+                        @Html.RadioButtonFor(m => Model.SensitivityOption, SensitivityLevel.Normal, true) Normal
+                        @Html.RadioButtonFor(m => Model.SensitivityOption, SensitivityLevel.Sensitive) Sensitive
                     </td>
                 </tr>
                 <tr>
                     <td>Authentication option</td>
                     <td>
-                        @Html.RadioButton("authenticationOption", AuthenticationLevel.Password, true) Password
-                        @Html.RadioButton("authenticationOption", AuthenticationLevel.TwoFactor) TwoFactor
+                        @Html.RadioButtonFor(m => Model.AuthenticationOption, AuthenticationLevel.Password, true) Password
+                        @Html.RadioButtonFor(m => Model.AuthenticationOption, AuthenticationLevel.TwoFactor) TwoFactor
                     </td>
                 </tr>
             </tbody>
         </table>
 
         <input type="submit" name="Submit" id="Submit" value="Send" />
-    }
-</div>
+
+    </div>
+}

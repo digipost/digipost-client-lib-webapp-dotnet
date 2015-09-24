@@ -15,12 +15,28 @@ namespace DigipostClientLibWebapp.Controllers
     {
         
         [HttpGet]
-        public ActionResult Index()
+        public ActionResult Index(SendModel sendModel)
         {
+            var personmodel = "personModel";
+
+            if(sendModel == null || string.IsNullOrEmpty(sendModel.DigipostAddress) )
+            {
+                var searchDetails = (SearchDetails)Session[personmodel];
+                if (searchDetails == null)
+                    return View("Index", new SendModel());
+                sendModel = ConvertToSendModel(searchDetails);
+                Session.Remove(personmodel);
+            }
             
-            var searchDetails = (SearchDetails)Session["personModel"];
+            
+            return View("Index",sendModel);
+        }
+
+        private static SendModel ConvertToSendModel(SearchDetails searchDetails)
+        {
             var sendModel = new SendModel();
-            if(searchDetails.SearchDetailsAddress != null) { 
+            if (searchDetails.SearchDetailsAddress != null)
+            {
                 sendModel.AdditionalAddressLine = searchDetails.SearchDetailsAddress.AdditionalAddressLine;
                 sendModel.City = searchDetails.SearchDetailsAddress.City;
                 sendModel.HouseLetter = searchDetails.SearchDetailsAddress.HouseLetter;
@@ -34,12 +50,9 @@ namespace DigipostClientLibWebapp.Controllers
             sendModel.LastName = searchDetails.LastName;
             sendModel.MobileNumber = searchDetails.MobileNumber;
             sendModel.OrganizationName = searchDetails.OrganizationName;
-            
-
-
-            return View("Index",sendModel);
+            return sendModel;
         }
-        
+
 
         [HttpPost]
         public async Task<ActionResult> Send(SendModel sendModel)
@@ -47,8 +60,10 @@ namespace DigipostClientLibWebapp.Controllers
             var digipostService = new DigipostService();
 
             byte[] fileContent = null;
-            var httpPostedFileBase = Request.Files[0];
-
+            HttpPostedFileBase httpPostedFileBase = null;
+            if (Request.Files != null) { 
+                httpPostedFileBase = sendModel.FileCollection =  Request.Files[0];
+            }
             if (httpPostedFileBase == null || httpPostedFileBase.ContentLength == 0)
                 return View("Index",sendModel);
 

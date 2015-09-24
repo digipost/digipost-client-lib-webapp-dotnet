@@ -235,7 +235,6 @@
     <Content Include="Views\Search\Index.cshtml" />
     <Content Include="Views\Send\Index.cshtml" />
     <Content Include="Views\Send\SendStatus.cshtml" />
-    <Content Include="Views\Send\SendPartial.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
