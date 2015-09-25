@@ -28,10 +28,10 @@ namespace DigipostClientLibWebapp.Models
         [Required]
         [MinLength(1)]
         public string Subject { get; set; }
-        public bool SmsAfterHour { get; internal set; }
-        public SensitivityLevel SensitivityOption { get; internal set; }
-        public AuthenticationLevel AuthenticationOption { get; internal set; }
-        public string SmsAfterHours { get; internal set; }
+        public bool SmsAfterHour { get;  set; }
+        public SensitivityLevel SensitivityOption { get;  set; }
+        public AuthenticationLevel AuthenticationOption { get;  set; }
+        public string SmsAfterHours { get;  set; }
 
     }
 }
