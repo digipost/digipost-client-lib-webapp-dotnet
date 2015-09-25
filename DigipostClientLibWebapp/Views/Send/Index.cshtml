@@ -73,35 +73,36 @@
         </div>
     </div>
 
-
+   
     <div>
-        <p>@Html.LabelFor(m => Model.Subject) &nbsp; @Html.TextBoxFor(m=>  Model.Subject)</p>
+        <p>@Html.ValidationMessage("ErrorMessage")</p>
+        <p>@Html.LabelFor(m => Model.Subject) &nbsp; @Html.TextBoxFor(m => Model.Subject)</p>
 
-        <input type="file" name="Model.FileCollection" />
+        <input type="file" name="FileCollection"/>
         <table>
             <thead>
-                <tr><td>Additional options</td><td></td></tr>
+            <tr><td>Additional options</td><td></td></tr>
             </thead>
             <tbody>
-                <tr><td>Sms notification</td><td>@Html.CheckBoxFor(m => Model.SmsAfterHour) @Html.TextBoxFor(m => Model.SmsAfterHours)</td></tr>
-                <tr>
-                    <td>Sensitivity option</td>
-                    <td>
-                        @Html.RadioButtonFor(m => Model.SensitivityOption, SensitivityLevel.Normal, true) Normal
-                        @Html.RadioButtonFor(m => Model.SensitivityOption, SensitivityLevel.Sensitive) Sensitive
-                    </td>
-                </tr>
-                <tr>
-                    <td>Authentication option</td>
-                    <td>
-                        @Html.RadioButtonFor(m => Model.AuthenticationOption, AuthenticationLevel.Password, true) Password
-                        @Html.RadioButtonFor(m => Model.AuthenticationOption, AuthenticationLevel.TwoFactor) TwoFactor
-                    </td>
-                </tr>
+            <tr><td>Sms notification</td><td>@Html.CheckBoxFor(m => Model.SmsAfterHour) @Html.TextBoxFor(m => Model.SmsAfterHours)</td></tr>
+            <tr>
+                <td>Sensitivity option</td>
+                <td>
+                    @Html.RadioButtonFor(m => Model.SensitivityOption, SensitivityLevel.Normal, true) Normal
+                    @Html.RadioButtonFor(m => Model.SensitivityOption, SensitivityLevel.Sensitive) Sensitive
+                </td>
+            </tr>
+            <tr>
+                <td>Authentication option</td>
+                <td>
+                    @Html.RadioButtonFor(m => Model.AuthenticationOption, AuthenticationLevel.Password) Password
+                    @Html.RadioButtonFor(m => Model.AuthenticationOption, AuthenticationLevel.TwoFactor) TwoFactor
+                </td>
+            </tr>
             </tbody>
         </table>
 
-        <input type="submit" name="Submit" id="Submit" value="Send" />
+        <input type="submit" name="Submit" id="Submit" value="Send"/>
 
     </div>
 }
