@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Digipost.Api.Client;
 using Digipost.Api.Client.Api;
 using Digipost.Api.Client.Domain.Enums;
+using Digipost.Api.Client.Domain.Exceptions;
 using Digipost.Api.Client.Domain.Search;
 using Digipost.Api.Client.Domain.SendMessage;
 using DigipostClientLibWebapp.Properties;
@@ -39,18 +40,34 @@ namespace DigipostClientLibWebapp.Services.Digipost
 
         public async Task<IMessageDeliveryResult> Send(byte[] fileContent, string filetype, string suject, string digipostAddress, SensitivityLevel sensitivityOption,AuthenticationLevel authenticationOption, bool smsAfterHour, string smsAfterHours)
         {
-            var recipient = new Recipient(IdentificationChoiceType.DigipostAddress, digipostAddress);
+            var recipient = new RecipientById(IdentificationType.DigipostAddress, digipostAddress);
 
-            var primaryDocument = new Document(suject, filetype, fileContent);
-            primaryDocument.SensitivityLevel = sensitivityOption;
-            primaryDocument.AuthenticationLevel = authenticationOption;
+            var primaryDocument = new Document(suject, filetype, fileContent)
+            {
+                SensitivityLevel = sensitivityOption,
+                AuthenticationLevel = authenticationOption
+            };
             if (smsAfterHour)
                 primaryDocument.SmsNotification = new SmsNotification(Int32.Parse(smsAfterHours));
 
             IMessage m = new Message(recipient, primaryDocument);
 
 
-            var result = await GetClient().SendMessageAsync(m);
+            IMessageDeliveryResult result = null;
+            try {
+                result = await GetClient().SendMessageAsync(m);
+            }
+            catch (ClientResponseException e)
+            {
+                var errorMessage = e.Error;
+                Logger.Error("> Error." + errorMessage);
+                throw;
+            }
+            catch (Exception e)
+            {
+                Logger.Error("> Oh snap... " + e.Message + e.InnerException.Message);
+                throw;
+            }
 
             return result;
         }

@@ -44,13 +44,21 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Digipost.Api.Client, Version=6.1.5737.28313, Culture=neutral, PublicKeyToken=683b8efceae684a6, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>Bin\Digipost.Api.Client.dll</HintPath>
+    <Reference Include="ApiClientShared, Version=1.0.5637.25994, Culture=neutral, PublicKeyToken=6e0e24e0c7886562, processorArchitecture=MSIL">
+      <HintPath>..\packages\digipost-api-client.6.2.5749.17830-beta\lib\net45\ApiClientShared.dll</HintPath>
+      <Private>True</Private>
     </Reference>
-    <Reference Include="Digipost.Api.Client.Domain, Version=6.1.5737.28312, Culture=neutral, PublicKeyToken=683b8efceae684a6, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>Bin\Digipost.Api.Client.Domain.dll</HintPath>
+    <Reference Include="Difi.Felles.Utility, Version=0.1.5598.25086, Culture=neutral, PublicKeyToken=bd8139acc70008cb, processorArchitecture=MSIL">
+      <HintPath>..\packages\digipost-api-client.6.2.5749.17830-beta\lib\net45\Difi.Felles.Utility.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Digipost.Api.Client, Version=6.2.5749.17830, Culture=neutral, PublicKeyToken=683b8efceae684a6, processorArchitecture=MSIL">
+      <HintPath>..\packages\digipost-api-client.6.2.5749.17830-beta\lib\net45\Digipost.Api.Client.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Digipost.Api.Client.Domain, Version=6.2.5749.17830, Culture=neutral, PublicKeyToken=683b8efceae684a6, processorArchitecture=MSIL">
+      <HintPath>..\packages\digipost-api-client.6.2.5749.17830-beta\lib\net45\Digipost.Api.Client.Domain.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="log4net, Version=1.2.13.0, Culture=neutral, PublicKeyToken=669e0ddf0bb1aa2a, processorArchitecture=MSIL">
       <HintPath>..\packages\log4net.2.0.3\lib\net40-full\log4net.dll</HintPath>
