@@ -6,6 +6,7 @@ using System.Web.Mvc;
 using Digipost.Api.Client.Domain.Enums;
 using Digipost.Api.Client.Domain.Search;
 using Digipost.Api.Client.Domain.SendMessage;
+using DigipostClientLibWebapp.Constants;
 using DigipostClientLibWebapp.Models;
 using DigipostClientLibWebapp.Services.Digipost;
 
@@ -13,56 +14,59 @@ namespace DigipostClientLibWebapp.Controllers
 {
     public class SendController : Controller
     {
+        private readonly DigipostService _digipostService;
+
+        public SendController(DigipostService digipostService)
+        {
+            _digipostService = digipostService;
+        }
+
+        public SendController()
+        {
+            _digipostService = new DigipostService();
+        }
+
+        private DigipostService GetDigipostService()
+        {
+            return _digipostService ?? new DigipostService();
+        }
 
         [HttpGet]
         public ActionResult Index(SendModel sendModel)
         {
-            var personmodel = "personModel";
-
             if (sendModel == null || string.IsNullOrEmpty(sendModel.DigipostAddress))
             {
-                var searchDetails = (SearchDetails)Session[personmodel];
+                var searchDetails = (SearchDetails)Session[SessionConstants.PersonModel];
                 if (searchDetails == null)
                     return View("Index", new SendModel());
-                sendModel = ConvertToSendModel(searchDetails);
-                Session.Remove(personmodel);
+                sendModel = Converter.SearchDetailsToSendModel(searchDetails);
+                Session.Remove(SessionConstants.PersonModel);
             }
-
-
             return View("Index", sendModel);
-        }
-
-        private static SendModel ConvertToSendModel(SearchDetails searchDetails)
-        {
-            var sendModel = new SendModel();
-            if (searchDetails.SearchDetailsAddress != null)
-            {
-                sendModel.AdditionalAddressLine = searchDetails.SearchDetailsAddress.AdditionalAddressLine;
-                sendModel.City = searchDetails.SearchDetailsAddress.City;
-                sendModel.HouseLetter = searchDetails.SearchDetailsAddress.HouseLetter;
-                sendModel.HouseNumber = searchDetails.SearchDetailsAddress.HouseNumber;
-                sendModel.Street = searchDetails.SearchDetailsAddress.Street;
-                sendModel.ZipCode = searchDetails.SearchDetailsAddress.ZipCode;
-            }
-            sendModel.DigipostAddress = searchDetails.DigipostAddress;
-            sendModel.FirstName = searchDetails.FirstName;
-            sendModel.MiddleName = searchDetails.MiddleName;
-            sendModel.LastName = searchDetails.LastName;
-            sendModel.MobileNumber = searchDetails.MobileNumber;
-            sendModel.OrganizationName = searchDetails.OrganizationName;
-            return sendModel;
         }
 
 
         [HttpPost]
         public async Task<ActionResult> Send(SendModel sendModel)
         {
-            var digipostService = new DigipostService();
             bool hasError = false;
             byte[] fileContent = null;
             var fileType = "";
 
-            if(string.IsNullOrEmpty(sendModel.DigipostAddress))
+            hasError = ValidateView(sendModel, hasError, ref fileContent, ref fileType);
+
+            if (hasError)
+            {
+                return View("Index", sendModel);
+            }
+
+            var result = await GetDigipostService().Send(fileContent, fileType, sendModel);
+            return View("SendStatus", result);
+        }
+
+        private bool ValidateView(SendModel sendModel, bool hasError, ref byte[] fileContent, ref string fileType)
+        {
+            if (string.IsNullOrEmpty(sendModel.DigipostAddress))
             {
                 ModelState.AddModelError("ErrorMessage", "Please add the reciever.");
                 hasError = true;
@@ -89,31 +93,14 @@ namespace DigipostClientLibWebapp.Controllers
                 {
                     fileContent = binaryReader.ReadBytes(httpPostedFileBase.ContentLength);
                 }
-                fileType = mapToDigipostFileType(httpPostedFileBase.ContentType);
+                fileType = Converter.MimeTypeToDigipostFileType(httpPostedFileBase.ContentType);
                 if (string.IsNullOrEmpty(fileType))
-                {
+                {   
                     ModelState.AddModelError("ErrorMessage", "Unknown filetype, supported types is [.PDF, .TXT]");
                     hasError = true;
                 }
             }
-
-            if (hasError)
-            {
-                return View("Index", sendModel);
-            }
-
-            var result = await digipostService.Send(fileContent, fileType, sendModel.Subject, sendModel.DigipostAddress, sendModel.SensitivityOption, sendModel.AuthenticationOption, sendModel.SmsAfterHour, sendModel.SmsAfterHours);
-            return View("SendStatus", result);
-        }
-
-        private string mapToDigipostFileType(string mimeType)
-        {
-            if (mimeType.Equals("application/pdf", StringComparison.OrdinalIgnoreCase))
-                return "pdf";
-            if (mimeType.Equals("text/plain", StringComparison.OrdinalIgnoreCase))
-                return "txt";
-
-            return "";
+            return hasError;
         }
     }
 }

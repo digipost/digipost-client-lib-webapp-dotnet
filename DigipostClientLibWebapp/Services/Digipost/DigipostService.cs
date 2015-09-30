@@ -8,6 +8,7 @@ using Digipost.Api.Client.Domain.Enums;
 using Digipost.Api.Client.Domain.Exceptions;
 using Digipost.Api.Client.Domain.Search;
 using Digipost.Api.Client.Domain.SendMessage;
+using DigipostClientLibWebapp.Models;
 using DigipostClientLibWebapp.Properties;
 using log4net;
 
@@ -19,7 +20,7 @@ namespace DigipostClientLibWebapp.Services.Digipost
 
         private static DigipostClient _digipostClient;
 
-        public async Task<ISearchDetailsResult> Search(string searchText)
+        public virtual async Task<ISearchDetailsResult> Search(string searchText)
         {
             ISearchDetailsResult result = null;
             Logger.Debug("inside Search(" + searchText + ")");
@@ -38,21 +39,20 @@ namespace DigipostClientLibWebapp.Services.Digipost
             return result;
         }
 
-        public async Task<IMessageDeliveryResult> Send(byte[] fileContent, string filetype, string suject, string digipostAddress, SensitivityLevel sensitivityOption,AuthenticationLevel authenticationOption, bool smsAfterHour, string smsAfterHours)
+        public virtual async Task<IMessageDeliveryResult> Send(byte[] fileContent, string filetype, SendModel sendModel)
         {
-            var recipient = new RecipientById(IdentificationType.DigipostAddress, digipostAddress);
+            var recipient = new RecipientById(IdentificationType.DigipostAddress, sendModel.DigipostAddress);
 
-            var primaryDocument = new Document(suject, filetype, fileContent)
+            var primaryDocument = new Document(sendModel.Subject, filetype, fileContent)
             {
-                SensitivityLevel = sensitivityOption,
-                AuthenticationLevel = authenticationOption
+                SensitivityLevel = sendModel.SensitivityOption,
+                AuthenticationLevel = sendModel.AuthenticationOption
             };
-            if (smsAfterHour)
-                primaryDocument.SmsNotification = new SmsNotification(Int32.Parse(smsAfterHours));
+            if (sendModel.SmsAfterHour)
+                primaryDocument.SmsNotification = new SmsNotification(int.Parse(sendModel.SmsAfterHours));
 
-            IMessage m = new Message(recipient, primaryDocument);
-
-
+            var m = new Message(recipient, primaryDocument);
+            
             IMessageDeliveryResult result = null;
             try {
                 result = await GetClient().SendMessageAsync(m);
@@ -71,9 +71,7 @@ namespace DigipostClientLibWebapp.Services.Digipost
 
             return result;
         }
-
-
-
+        
         private static DigipostClient GetClient()
         {
             return _digipostClient ?? InitClient();
@@ -84,9 +82,9 @@ namespace DigipostClientLibWebapp.Services.Digipost
 
             var config = new ClientConfig(Settings.Default.senderid, Settings.Default.url, Settings.Default.timeout, false)
             {
-                Logger = (severity, traceID, metode, message) =>
+                Logger = (severity, traceId, metode, message) =>
                 {
-                    Logger.Debug(message);
+                    Logger.Debug(string.Format("[{0}]:[{1}]:[{2}]", traceId, metode, message));
                 }
             };
 
@@ -95,9 +93,5 @@ namespace DigipostClientLibWebapp.Services.Digipost
 
             return _digipostClient;
         }
-
-
-
     }
-
 }
