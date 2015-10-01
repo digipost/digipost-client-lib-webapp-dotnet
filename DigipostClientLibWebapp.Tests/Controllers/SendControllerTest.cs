@@ -71,7 +71,6 @@ namespace DigipostClientLibWebapp.Tests.Controllers
                 DeliveryMethod = DeliveryMethod.Digipost
             };
             var digipostService = new Mock<DigipostService>();
-            var searchDetailsResult = TestHelper.GetSearchDetailsResult();
             digipostService.Setup(x => x.Send(It.IsAny<byte[]>(), It.IsAny<string>(), It.IsAny<SendModel>())).ReturnsAsync(sendResponse);
             var controller = new SendController(digipostService.Object);
             var context = new Mock<HttpContextBase>();
@@ -79,9 +78,7 @@ namespace DigipostClientLibWebapp.Tests.Controllers
             context.Setup(x => x.Session).Returns(session.Object);
 
             var fileContent = GetBytes("filecontent");
-
             var stream = new MemoryStream(fileContent);
-
             var mockFile = new Mock<HttpPostedFileBase>();
             var mockFiles = new Mock<HttpFileCollectionBase>();
             var mockRequest = new Mock<HttpRequestBase>();
@@ -91,11 +88,8 @@ namespace DigipostClientLibWebapp.Tests.Controllers
             mockFiles.Setup(f => f.Count).Returns(1);
             mockFiles.Setup(f => f[0]).Returns(mockFile.Object);
             mockRequest.Setup(r => r.Files).Returns(() => mockFiles.Object);
-
             context.Setup(x => x.Request).Returns(mockRequest.Object);
-
             var requestContext = new RequestContext(context.Object, new RouteData());
-
             controller.ControllerContext = new ControllerContext(requestContext, controller);
 
             // Act
@@ -106,6 +100,8 @@ namespace DigipostClientLibWebapp.Tests.Controllers
             var viewModel = result.Model as MessageDeliveryResult;
             var viewName = result.ViewName;
             Assert.AreEqual("SendStatus", viewName);
+            Assert.IsNotNull(viewModel);
+            Assert.AreEqual(DeliveryMethod.Digipost,viewModel.DeliveryMethod);
         }
 
         static byte[] GetBytes(string str)
