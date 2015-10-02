@@ -5,6 +5,7 @@ using System.Web.Mvc;
 using System.Web.Routing;
 using Digipost.Api.Client.Domain.DataTransferObjects;
 using Digipost.Api.Client.Domain.Enums;
+using Digipost.Api.Client.Domain.SendMessage;
 using DigipostClientLibWebapp.Constants;
 using DigipostClientLibWebapp.Controllers;
 using DigipostClientLibWebapp.Models;
@@ -63,34 +64,8 @@ namespace DigipostClientLibWebapp.Tests.Controllers
         public void Send()
         {
             // Arrange
-            var sendModel = Converter.SearchDetailsToSendModel(TestHelper.GetSearchDetailsResult().PersonDetails[0]);
-            sendModel.Subject = "Test subject";
-            var sendResponse = new MessageDeliveryResult
-            {
-                DeliveryTime = DateTime.Now,
-                DeliveryMethod = DeliveryMethod.Digipost
-            };
-            var digipostService = new Mock<DigipostService>();
-            digipostService.Setup(x => x.Send(It.IsAny<byte[]>(), It.IsAny<string>(), It.IsAny<SendModel>())).ReturnsAsync(sendResponse);
-            var controller = new SendController(digipostService.Object);
-            var context = new Mock<HttpContextBase>();
-            var session = new Mock<HttpSessionStateBase>();
-            context.Setup(x => x.Session).Returns(session.Object);
-
-            var fileContent = GetBytes("filecontent");
-            var stream = new MemoryStream(fileContent);
-            var mockFile = new Mock<HttpPostedFileBase>();
-            var mockFiles = new Mock<HttpFileCollectionBase>();
-            var mockRequest = new Mock<HttpRequestBase>();
-            mockFile.Setup(f => f.InputStream).Returns(stream);
-            mockFile.Setup(x => x.ContentLength).Returns(fileContent.Length);
-            mockFile.Setup(x => x.ContentType).Returns("application/pdf");
-            mockFiles.Setup(f => f.Count).Returns(1);
-            mockFiles.Setup(f => f[0]).Returns(mockFile.Object);
-            mockRequest.Setup(r => r.Files).Returns(() => mockFiles.Object);
-            context.Setup(x => x.Request).Returns(mockRequest.Object);
-            var requestContext = new RequestContext(context.Object, new RouteData());
-            controller.ControllerContext = new ControllerContext(requestContext, controller);
+            var sendModel = SearchDetailsToSendModel();
+            var controller = SendController();
 
             // Act
             var result = controller.Send(sendModel).Result as ViewResult;
@@ -104,9 +79,69 @@ namespace DigipostClientLibWebapp.Tests.Controllers
             Assert.AreEqual(DeliveryMethod.Digipost,viewModel.DeliveryMethod);
         }
 
+        private static SendController SendController()
+        {
+            var mockedDigipostService = MockedDigipostService();
+            var controller = new SendController(mockedDigipostService.Object);
+            var mockedContext = RequestContext();
+            controller.ControllerContext = new ControllerContext(mockedContext, controller);
+            return controller;
+        }
+
+        private static RequestContext RequestContext()
+        {
+            var mockedContext = MockedContext();
+            var requestContext = new RequestContext(mockedContext.Object, new RouteData());
+            return requestContext;
+        }
+
+        private static Mock<DigipostService> MockedDigipostService()
+        {
+            var sendResponse = TestHelper.SendResponse();
+            var digipostService = new Mock<DigipostService>();
+            digipostService.Setup(x => x.Send(It.IsAny<byte[]>(), It.IsAny<string>(), It.IsAny<SendModel>()))
+                .ReturnsAsync(sendResponse);
+            return digipostService;
+        }
+
+        
+
+        private static SendModel SearchDetailsToSendModel()
+        {
+            var sendModel =  Converter.SearchDetailsToSendModel(TestHelper.GetSearchDetailsResult().PersonDetails[0]);
+            sendModel.Subject = "Test subject";
+            return sendModel;
+        }
+
+        private static Mock<HttpContextBase> MockedContext()
+        {
+            var context = new Mock<HttpContextBase>();
+            var session = new Mock<HttpSessionStateBase>();
+            context.Setup(x => x.Session).Returns(session.Object);
+            var mockRequest = MockedFileRequest();
+            context.Setup(x => x.Request).Returns(mockRequest.Object);
+            return context;
+        }
+
+        private static Mock<HttpRequestBase> MockedFileRequest()
+        {
+            var fileContent = GetBytes("filecontent");
+            var stream = new MemoryStream(fileContent);
+            var mockFile = new Mock<HttpPostedFileBase>();
+            var mockFiles = new Mock<HttpFileCollectionBase>();
+            var mockRequest = new Mock<HttpRequestBase>();
+            mockFile.Setup(f => f.InputStream).Returns(stream);
+            mockFile.Setup(x => x.ContentLength).Returns(fileContent.Length);
+            mockFile.Setup(x => x.ContentType).Returns("application/pdf");
+            mockFiles.Setup(f => f.Count).Returns(1);
+            mockFiles.Setup(f => f[0]).Returns(mockFile.Object);
+            mockRequest.Setup(r => r.Files).Returns(() => mockFiles.Object);
+            return mockRequest;
+        }
+
         static byte[] GetBytes(string str)
         {
-            byte[] bytes = new byte[str.Length * sizeof(char)];
+            var bytes = new byte[str.Length * sizeof(char)];
             System.Buffer.BlockCopy(str.ToCharArray(), 0, bytes, 0, bytes.Length);
             return bytes;
         }

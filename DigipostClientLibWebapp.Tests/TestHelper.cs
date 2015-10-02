@@ -1,10 +1,23 @@
+using System;
 using System.Collections.Generic;
+using Digipost.Api.Client.Domain.DataTransferObjects;
+using Digipost.Api.Client.Domain.Enums;
 using Digipost.Api.Client.Domain.Search;
 
 namespace DigipostClientLibWebapp.Tests
 {
     public class TestHelper
     {
+
+        public static MessageDeliveryResult SendResponse()
+        {
+            return new MessageDeliveryResult
+            {
+                DeliveryTime = DateTime.Now,
+                DeliveryMethod = DeliveryMethod.Digipost
+            };
+        }
+
         public static SearchDetailsResult GetSearchDetailsResult()
         {
             var searchDetailsResult = new SearchDetailsResult {PersonDetails = new List<SearchDetails>()};
