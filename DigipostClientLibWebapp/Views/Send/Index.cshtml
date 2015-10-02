@@ -14,7 +14,7 @@
     <div class="jumbotron">
         @if (Model.FirstName != null)
         {
-            <h3>@Html.LabelFor(m => Model.FirstName)&nbsp;@Html.LabelForModel(Model.MiddleName)&nbsp;@Html.LabelForModel(Model.LastName)</h3>
+            <h3>@Html.LabelForModel(Model.FirstName)&nbsp;@Html.LabelForModel(Model.MiddleName)&nbsp;@Html.LabelForModel(Model.LastName)</h3>
             @Html.HiddenFor(m => Model.FirstName)
             @Html.HiddenFor(m => Model.MiddleName)
             @Html.HiddenFor(m => Model.LastName)

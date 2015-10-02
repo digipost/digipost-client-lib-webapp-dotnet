@@ -45,19 +45,19 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="ApiClientShared, Version=1.0.5637.25994, Culture=neutral, PublicKeyToken=6e0e24e0c7886562, processorArchitecture=MSIL">
-      <HintPath>..\packages\digipost-api-client.6.2.5749.17830-beta\lib\net45\ApiClientShared.dll</HintPath>
+      <HintPath>..\packages\digipost-api-client.6.2.5750.20273\lib\net45\ApiClientShared.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Difi.Felles.Utility, Version=0.1.5598.25086, Culture=neutral, PublicKeyToken=bd8139acc70008cb, processorArchitecture=MSIL">
-      <HintPath>..\packages\digipost-api-client.6.2.5749.17830-beta\lib\net45\Difi.Felles.Utility.dll</HintPath>
+      <HintPath>..\packages\digipost-api-client.6.2.5750.20273\lib\net45\Difi.Felles.Utility.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Digipost.Api.Client, Version=6.2.5749.17830, Culture=neutral, PublicKeyToken=683b8efceae684a6, processorArchitecture=MSIL">
-      <HintPath>..\packages\digipost-api-client.6.2.5749.17830-beta\lib\net45\Digipost.Api.Client.dll</HintPath>
+    <Reference Include="Digipost.Api.Client, Version=6.2.5750.20273, Culture=neutral, PublicKeyToken=683b8efceae684a6, processorArchitecture=MSIL">
+      <HintPath>..\packages\digipost-api-client.6.2.5750.20273\lib\net45\Digipost.Api.Client.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Digipost.Api.Client.Domain, Version=6.2.5749.17830, Culture=neutral, PublicKeyToken=683b8efceae684a6, processorArchitecture=MSIL">
-      <HintPath>..\packages\digipost-api-client.6.2.5749.17830-beta\lib\net45\Digipost.Api.Client.Domain.dll</HintPath>
+    <Reference Include="Digipost.Api.Client.Domain, Version=6.2.5750.20273, Culture=neutral, PublicKeyToken=683b8efceae684a6, processorArchitecture=MSIL">
+      <HintPath>..\packages\digipost-api-client.6.2.5750.20273\lib\net45\Digipost.Api.Client.Domain.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="log4net, Version=1.2.13.0, Culture=neutral, PublicKeyToken=669e0ddf0bb1aa2a, processorArchitecture=MSIL">
@@ -185,9 +185,11 @@
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
+    <Compile Include="Controllers\Converter.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\SearchController.cs" />
     <Compile Include="Controllers\SendController.cs" />
+    <Compile Include="Constants\SessionConstants.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>

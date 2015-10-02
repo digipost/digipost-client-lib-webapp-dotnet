@@ -26,16 +26,16 @@
             @foreach (var person in Model)
                 {
                 <tr>
-                    <td>@Html.Label(person.FirstName)</td>
-                    <td>@Html.Label(person.MiddleName)</td>
-                    <td>@Html.Label(person.LastName)</td>
-                    <td>@Html.Label(person.DigipostAddress)</td>
-                    <td>@Html.Label(person.MobileNumber)</td>
-                    <td>@Html.Label(person.OrganizationName)</td>
+                    <td>@Html.LabelForModel(person.FirstName)</td>
+                    <td>@Html.LabelForModel(person.MiddleName)</td>
+                    <td>@Html.LabelForModel(person.LastName)</td>
+                    <td>@Html.LabelForModel(person.DigipostAddress)</td>
+                    <td>@Html.LabelForModel(person.MobileNumber)</td>
+                    <td>@Html.LabelForModel(person.OrganizationName)</td>
                     <td>
                         @if (person.SearchDetailsAddress != null)
                         {
-                            @Html.Label(person.SearchDetailsAddress.ToString())
+                            @Html.LabelForModel(person.SearchDetailsAddress.ToString())
                         }
                     </td>
                     

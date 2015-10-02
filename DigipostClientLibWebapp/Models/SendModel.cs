@@ -1,9 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.Web;
-using System.Web.UI.WebControls;
 using Digipost.Api.Client.Domain.Enums;
-using Digipost.Api.Client.Domain.Search;
-using Microsoft.AspNet.Identity;
 
 namespace DigipostClientLibWebapp.Models
 {
