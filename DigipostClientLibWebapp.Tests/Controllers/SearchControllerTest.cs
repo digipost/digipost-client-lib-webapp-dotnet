@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Security.Principal;
 using System.Web;
 using System.Web.Mvc;
 using System.Web.Routing;
@@ -32,9 +31,25 @@ namespace DigipostClientLibWebapp.Tests.Controllers
         public void Search()
         {
             // Arrange
-            const string searchString = "kristian sæther enge oslo";
-            var digipostService = new Mock<DigipostService>();
+            const string searchString = "testulf testesen oslo";
             var searchDetailsResult = TestHelper.GetSearchDetailsResult();
+            var controller = SearchControllerWithMockedDigipostServiceAndSessionState(searchString, searchDetailsResult);
+
+            // Act
+            var result = controller.Search(searchString).Result as ViewResult;
+
+            // Assert
+            Assert.IsNotNull(result);
+            var viewModel = result.Model as List<SearchDetails>;
+            var viewName = result.ViewName;
+            Assert.AreEqual("Index", viewName);
+            Assert.AreEqual(searchDetailsResult.PersonDetails, viewModel);
+        }
+
+        private static SearchController SearchControllerWithMockedDigipostServiceAndSessionState(string searchString,
+            SearchDetailsResult searchDetailsResult)
+        {
+            var digipostService = new Mock<DigipostService>();
             digipostService.Setup(x => x.Search(searchString)).ReturnsAsync(searchDetailsResult);
             var controller = new SearchController(digipostService.Object);
             var context = new Mock<HttpContextBase>();
@@ -42,39 +57,36 @@ namespace DigipostClientLibWebapp.Tests.Controllers
             context.Setup(x => x.Session).Returns(session.Object);
             var requestContext = new RequestContext(context.Object, new RouteData());
             controller.ControllerContext = new ControllerContext(requestContext, controller);
-            
-            // Act
-            var result =  controller.Search(searchString).Result as ViewResult;
-
-            // Assert
-            Assert.IsNotNull(result);
-            var viewModel = result.Model as List<SearchDetails>;
-            var viewName = result.ViewName;
-            Assert.AreEqual("Index",viewName);
-            Assert.AreEqual(searchDetailsResult.PersonDetails, viewModel);
+            return controller;
         }
 
         [TestMethod]
         public void GoToSendTest()
         {
             // Arrange
-            var controller = new SearchController();
             var searchDetailsResult = TestHelper.GetSearchDetailsResult();
+            var controller = SearchControllerWithMockedSessionState(searchDetailsResult);
             
-            
+            // Act
+            var result =
+                controller.GoToSend(searchDetailsResult.PersonDetails[0].DigipostAddress) as RedirectToRouteResult;
+
+            // Assert
+            Assert.IsNotNull(result);
+            Assert.AreEqual("Send", result.RouteValues["controller"]);
+            Assert.AreEqual("Index", result.RouteValues["action"]);
+        }
+
+        private static SearchController SearchControllerWithMockedSessionState(SearchDetailsResult searchDetailsResult)
+        {
+            var controller = new SearchController();
             var context = new Mock<HttpContextBase>();
             var session = new Mock<HttpSessionStateBase>();
             session.Setup(x => x[SessionConstants.PersonDetails]).Returns(searchDetailsResult);
             context.Setup(x => x.Session).Returns(session.Object);
             var requestContext = new RequestContext(context.Object, new RouteData());
             controller.ControllerContext = new ControllerContext(requestContext, controller);
-            // Act
-            var result = controller.GoToSend(searchDetailsResult.PersonDetails[0].DigipostAddress) as RedirectToRouteResult ;
-
-            // Assert
-            Assert.IsNotNull(result);
-            Assert.AreEqual("Send", result.RouteValues["controller"]);
-            Assert.AreEqual("Index", result.RouteValues["action"]);
+            return controller;
         }
     }
 }
