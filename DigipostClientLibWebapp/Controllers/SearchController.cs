@@ -3,7 +3,6 @@ using System.Threading.Tasks;
 using System.Web.Mvc;
 using Digipost.Api.Client.Domain.Search;
 using DigipostClientLibWebapp.Constants;
-using DigipostClientLibWebapp.Models;
 using DigipostClientLibWebapp.Services.Digipost;
 
 namespace DigipostClientLibWebapp.Controllers
@@ -50,7 +49,6 @@ namespace DigipostClientLibWebapp.Controllers
         {
             var personDetails = (ISearchDetailsResult)Session[SessionConstants.PersonDetails];
             var person = personDetails.PersonDetails.Find(details => details.DigipostAddress.Equals(digipostAddress));
-
             
             Session[SessionConstants.PersonModel] = person;
             return RedirectToAction("Index", "Send");
