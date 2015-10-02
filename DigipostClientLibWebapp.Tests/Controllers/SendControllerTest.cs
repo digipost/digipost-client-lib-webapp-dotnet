@@ -5,7 +5,7 @@ using System.Web.Mvc;
 using System.Web.Routing;
 using Digipost.Api.Client.Domain.DataTransferObjects;
 using Digipost.Api.Client.Domain.Enums;
-using Digipost.Api.Client.Domain.SendMessage;
+using Digipost.Api.Client.Domain.Search;
 using DigipostClientLibWebapp.Constants;
 using DigipostClientLibWebapp.Controllers;
 using DigipostClientLibWebapp.Models;
@@ -25,13 +25,7 @@ namespace DigipostClientLibWebapp.Tests.Controllers
             // Arrange
             var person = TestHelper.GetSearchDetailsResult().PersonDetails[0];
             var expectedModel = Converter.SearchDetailsToSendModel(person);
-            var controller = new SendController();
-            var context = new Mock<HttpContextBase>();
-            var session = new Mock<HttpSessionStateBase>();
-            session.Setup(x => x[SessionConstants.PersonModel]).Returns(person);
-            context.Setup(x => x.Session).Returns(session.Object);
-            var requestContext = new RequestContext(context.Object, new RouteData());
-            controller.ControllerContext = new ControllerContext(requestContext, controller);
+            var controller = SendControllerWithMockedRequestContext(person);
             var compareLogic = new CompareLogic();
 
             // Act
@@ -41,6 +35,24 @@ namespace DigipostClientLibWebapp.Tests.Controllers
             Assert.IsNotNull(result);
             Assert.AreEqual("Index", result.ViewName);
             Assert.IsTrue(compareLogic.Compare(expectedModel, result.Model).AreEqual);
+        }
+
+        private static SendController SendControllerWithMockedRequestContext(SearchDetails person)
+        {
+            var controller = new SendController();
+            var mockedRequestContext = MockedRequestContextWithSessionState(person);
+            controller.ControllerContext = new ControllerContext(mockedRequestContext, controller);
+            return controller;
+        }
+
+        private static RequestContext MockedRequestContextWithSessionState(SearchDetails person)
+        {
+            var mockedContext = new Mock<HttpContextBase>();
+            var session = new Mock<HttpSessionStateBase>();
+            session.Setup(x => x[SessionConstants.PersonModel]).Returns(person);
+            mockedContext.Setup(x => x.Session).Returns(session.Object);
+            var requestContext = new RequestContext(mockedContext.Object, new RouteData());
+            return requestContext;
         }
 
         [TestMethod]
@@ -65,7 +77,7 @@ namespace DigipostClientLibWebapp.Tests.Controllers
         {
             // Arrange
             var sendModel = SearchDetailsToSendModel();
-            var controller = SendController();
+            var controller = SendControllerWithMockedDigipostServiceAndRequestFile();
 
             // Act
             var result = controller.Send(sendModel).Result as ViewResult;
@@ -76,24 +88,33 @@ namespace DigipostClientLibWebapp.Tests.Controllers
             var viewName = result.ViewName;
             Assert.AreEqual("SendStatus", viewName);
             Assert.IsNotNull(viewModel);
-            Assert.AreEqual(DeliveryMethod.Digipost,viewModel.DeliveryMethod);
+            Assert.AreEqual(DeliveryMethod.Digipost, viewModel.DeliveryMethod);
         }
 
-        private static SendController SendController()
+        private static SendController SendControllerWithMockedDigipostServiceAndRequestFile()
         {
             var mockedDigipostService = MockedDigipostService();
             var controller = new SendController(mockedDigipostService.Object);
-            var mockedContext = RequestContext();
-            controller.ControllerContext = new ControllerContext(mockedContext, controller);
+            var mockedRequestContext = MockedRequestContext();
+            controller.ControllerContext = new ControllerContext(mockedRequestContext, controller);
             return controller;
         }
 
-        private static RequestContext RequestContext()
+        private static RequestContext MockedRequestContext()
         {
-            var mockedContext = MockedContext();
+            var mockedContext = MockedContextWithFileRequest();
             var requestContext = new RequestContext(mockedContext.Object, new RouteData());
             return requestContext;
         }
+
+        private static Mock<HttpContextBase> MockedContextWithFileRequest()
+        {
+            var context = new Mock<HttpContextBase>();
+            var mockRequest = MockedFileRequest();
+            context.Setup(x => x.Request).Returns(mockRequest.Object);
+            return context;
+        }
+
 
         private static Mock<DigipostService> MockedDigipostService()
         {
@@ -104,24 +125,14 @@ namespace DigipostClientLibWebapp.Tests.Controllers
             return digipostService;
         }
 
-        
 
         private static SendModel SearchDetailsToSendModel()
         {
-            var sendModel =  Converter.SearchDetailsToSendModel(TestHelper.GetSearchDetailsResult().PersonDetails[0]);
+            var sendModel = Converter.SearchDetailsToSendModel(TestHelper.GetSearchDetailsResult().PersonDetails[0]);
             sendModel.Subject = "Test subject";
             return sendModel;
         }
 
-        private static Mock<HttpContextBase> MockedContext()
-        {
-            var context = new Mock<HttpContextBase>();
-            var session = new Mock<HttpSessionStateBase>();
-            context.Setup(x => x.Session).Returns(session.Object);
-            var mockRequest = MockedFileRequest();
-            context.Setup(x => x.Request).Returns(mockRequest.Object);
-            return context;
-        }
 
         private static Mock<HttpRequestBase> MockedFileRequest()
         {
@@ -139,10 +150,10 @@ namespace DigipostClientLibWebapp.Tests.Controllers
             return mockRequest;
         }
 
-        static byte[] GetBytes(string str)
+        private static byte[] GetBytes(string str)
         {
-            var bytes = new byte[str.Length * sizeof(char)];
-            System.Buffer.BlockCopy(str.ToCharArray(), 0, bytes, 0, bytes.Length);
+            var bytes = new byte[str.Length*sizeof (char)];
+            Buffer.BlockCopy(str.ToCharArray(), 0, bytes, 0, bytes.Length);
             return bytes;
         }
     }
