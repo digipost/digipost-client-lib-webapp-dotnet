@@ -6,6 +6,7 @@ using Digipost.Api.Client;
 using Digipost.Api.Client.Api;
 using Digipost.Api.Client.Domain.Enums;
 using Digipost.Api.Client.Domain.Exceptions;
+using Digipost.Api.Client.Domain.Identify;
 using Digipost.Api.Client.Domain.Search;
 using Digipost.Api.Client.Domain.SendMessage;
 using DigipostClientLibWebapp.Models;
@@ -20,6 +21,23 @@ namespace DigipostClientLibWebapp.Services.Digipost
 
         private static DigipostClient _digipostClient;
 
+        public virtual async Task<IIdentificationResult> Identify(Identification identification)
+        {
+            IIdentificationResult result = null;
+            Logger.Debug("Inside Identify("+identification.ToString()+")");
+            try
+            {
+                result = await GetClient().IdentifyAsync(identification);
+            }
+            catch (ClientResponseException cre)
+            {
+                Logger.Error(cre.Message,cre);
+                throw;
+            }
+            return result;
+
+        } 
+
         public virtual async Task<ISearchDetailsResult> Search(string searchText)
         {
             ISearchDetailsResult result = null;
@@ -30,7 +48,7 @@ namespace DigipostClientLibWebapp.Services.Digipost
                 result = await GetClient().SearchAsync(searchText);
                 Logger.Debug("Search async done()");
             }
-            catch (Exception e)
+            catch (ClientResponseException e)
             {
                 Logger.Error(e.Message, e);
                 throw;
@@ -63,11 +81,7 @@ namespace DigipostClientLibWebapp.Services.Digipost
                 Logger.Error("> Error." + errorMessage);
                 throw;
             }
-            catch (Exception e)
-            {
-                Logger.Error("> Oh snap... " + e.Message + e.InnerException.Message);
-                throw;
-            }
+         
 
             return result;
         }
