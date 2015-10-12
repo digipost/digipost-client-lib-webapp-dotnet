@@ -185,8 +185,10 @@
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
+    <Compile Include="Controllers\ControllerBase.cs" />
     <Compile Include="Controllers\Converter.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\IdentifyController.cs" />
     <Compile Include="Controllers\SearchController.cs" />
     <Compile Include="Controllers\SendController.cs" />
     <Compile Include="Constants\SessionConstants.cs" />
@@ -245,10 +247,13 @@
     <Content Include="Views\Search\Index.cshtml" />
     <Content Include="Views\Send\Index.cshtml" />
     <Content Include="Views\Send\SendStatus.cshtml" />
+    <Content Include="Views\Identify\Index.cshtml" />
+    <Content Include="Views\Identify\IdentificationResult.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="ViewModels\" />
+    <Folder Include="Views\ControllerBase\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff" />
@@ -271,7 +276,7 @@
     <VisualStudio>
       <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">
         <WebProjectProperties>
-          <UseIIS>True</UseIIS>
+          <UseIIS>False</UseIIS>
           <AutoAssignPort>True</AutoAssignPort>
           <DevelopmentServerPort>62622</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>

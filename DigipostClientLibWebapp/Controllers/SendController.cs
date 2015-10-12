@@ -1,34 +1,23 @@
-﻿using System;
-using System.IO;
+﻿using System.IO;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
-using Digipost.Api.Client.Domain.Enums;
 using Digipost.Api.Client.Domain.Search;
-using Digipost.Api.Client.Domain.SendMessage;
 using DigipostClientLibWebapp.Constants;
 using DigipostClientLibWebapp.Models;
 using DigipostClientLibWebapp.Services.Digipost;
 
 namespace DigipostClientLibWebapp.Controllers
 {
-    public class SendController : Controller
+    public class SendController : ControllerBase
     {
-        private readonly DigipostService _digipostService;
-
-        public SendController(DigipostService digipostService)
+        public SendController() : base()
         {
-            _digipostService = digipostService;
+
         }
-
-        public SendController()
+        public SendController(DigipostService digipostService) : base(digipostService)
         {
-            _digipostService = new DigipostService();
-        }
 
-        private DigipostService GetDigipostService()
-        {
-            return _digipostService ?? new DigipostService();
         }
 
         [HttpGet]
@@ -95,7 +84,7 @@ namespace DigipostClientLibWebapp.Controllers
                 }
                 fileType = Converter.MimeTypeToDigipostFileType(httpPostedFileBase.ContentType);
                 if (string.IsNullOrEmpty(fileType))
-                {   
+                {
                     ModelState.AddModelError("ErrorMessage", "Unknown filetype, supported types is [.PDF, .TXT]");
                     hasError = true;
                 }

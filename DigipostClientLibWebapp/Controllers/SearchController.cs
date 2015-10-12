@@ -7,23 +7,16 @@ using DigipostClientLibWebapp.Services.Digipost;
 
 namespace DigipostClientLibWebapp.Controllers
 {
-    public class SearchController : Controller
+    public class SearchController : ControllerBase
     {
-        private readonly DigipostService _digipostService;
-
-        public SearchController(DigipostService digipostService)
+        public SearchController() : base()
         {
-            _digipostService = digipostService;
+            
         }
 
-        public SearchController()
+        public SearchController(DigipostService digipostService) : base(digipostService)
         {
-            _digipostService =  new DigipostService();
-        }
-
-        private DigipostService GetDigipostService()
-        {
-            return _digipostService ?? new DigipostService();
+            
         }
 
         public ActionResult Index(List<SearchDetails> search)
@@ -34,7 +27,6 @@ namespace DigipostClientLibWebapp.Controllers
             return View(search);
         }
         
-
         [HttpPost]
         public async Task<ActionResult> Search(string search)
         {
