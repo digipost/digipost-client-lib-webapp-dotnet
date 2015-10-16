@@ -1,8 +1,13 @@
 ﻿@model Digipost.Api.Client.Domain.Identify.IdentificationResult
 
 @{
-    ViewBag.Title = "title";
+    ViewBag.Title = "Identification result";
     
 }
 
-<h2>title</h2>
+<h2>@ViewBag.Title</h2>
+<h3>@Html.LabelFor(m => Model.ResultType) : @Html.LabelForModel(Model.ResultType.ToString())</h3>
+<div>
+    <p>@Html.LabelFor(m => Model.Error) : @Html.LabelForModel(Model.Error)</p>
+    <p>@Html.LabelFor(m => Model.Data) : @Html.LabelForModel(Model.Data)</p>
+</div>

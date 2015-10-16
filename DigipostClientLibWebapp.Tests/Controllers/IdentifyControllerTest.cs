@@ -43,15 +43,17 @@ namespace DigipostClientLibWebapp.Tests.Controllers
             IdentificationResult identificationResult = new IdentificationResult(IdentificationResultType.DigipostAddress, digipostAddress);
             IdentifyController controller =  IdentifyControllerWithMockedDigipostServiceAndSessionState(identification,identificationResult);
             
-            
             // Act
             ViewResult result = controller.Identify(identification).Result as ViewResult;
             
             // Assert
             Assert.IsNotNull(result);
+            var viewName = result.ViewName;
+            Assert.AreEqual("IdentificationResult", viewName);
             Assert.IsInstanceOfType(result.Model, typeof(IdentificationResult));
-            var resultModel = result.Model as IdentificationResult;
-            Assert.AreEqual(digipostAddress, resultModel.Data);
+            var viewModel = result.Model as IdentificationResult;
+            Assert.AreEqual(digipostAddress, viewModel.Data);
+
         }
 
         private static IdentifyController IdentifyControllerWithMockedDigipostServiceAndSessionState(Identification identification,
