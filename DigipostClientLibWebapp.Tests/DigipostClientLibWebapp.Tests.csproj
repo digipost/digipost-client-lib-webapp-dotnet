@@ -106,6 +106,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Controllers\IdentifyControllerTest.cs" />
     <Compile Include="Controllers\SearchControllerTest.cs" />
     <Compile Include="Controllers\SendControllerTest.cs" />
     <Compile Include="TestHelper.cs" />

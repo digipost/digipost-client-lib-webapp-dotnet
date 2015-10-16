@@ -19,6 +19,6 @@ namespace DigipostClientLibWebapp.Controllers
             var result = new IdentificationResult(IdentificationResultType.DigipostAddress, "test");
 
             return View("IdentificationResult",result);
-        }
+        } 
     }
 }
