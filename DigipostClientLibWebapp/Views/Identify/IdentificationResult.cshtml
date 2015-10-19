@@ -1,4 +1,5 @@
-﻿@model Digipost.Api.Client.Domain.Identify.IdentificationResult
+﻿@using Digipost.Api.Client.Domain.Enums
+@model Digipost.Api.Client.Domain.Identify.IdentificationResult
 
 @{
     ViewBag.Title = "Identification result";
@@ -6,9 +7,17 @@
 }
 
 <div class="jumbotron">
-    <h4>@Html.LabelFor(m => Model.ResultType) : @Html.LabelForModel(Model.ResultType.ToString())</h4>
+    
+    <h3 class="@(Model.ResultType == IdentificationResultType.DigipostAddress || Model.ResultType == IdentificationResultType.Personalias ? "text-success":  "text-danger")">@Html.LabelFor(m => Model.ResultType) : @Html.LabelForModel(Model.ResultType.ToString())</h3>
     <div>
-        <p>@Html.LabelFor(m => Model.Error) : @Html.LabelForModel(Model.Error.ToString())</p>
-        <p>@Html.LabelFor(m => Model.Data) : @Html.LabelForModel(Model.Data)</p>
+        @if (Model.Error != null)
+        {
+            <p>@Html.LabelFor(m => Model.Error) : @Html.LabelForModel(Model.Error.ToString())</p>
+        }
+        else
+        {
+            <p>@Html.LabelFor(m => Model.Data) : @Html.LabelForModel(Model.Data)</p>
+        }
+
     </div>
 </div>

@@ -1,4 +1,5 @@
-﻿using System.Reflection;
+﻿using System;
+using System.Reflection;
 using System.Threading.Tasks;
 using Digipost.Api.Client;
 using Digipost.Api.Client.Api;
@@ -29,7 +30,12 @@ namespace DigipostClientLibWebapp.Services.Digipost
             }
             catch (ClientResponseException cre)
             {
-                Logger.Error(cre.Message,cre);
+                Logger.Error(cre.Message, cre);
+                throw;
+            }
+            catch (Exception e)
+            {
+                Logger.Error(e.Message, e);
                 throw;
             }
             return result;
