@@ -8,9 +8,6 @@ namespace DigipostClientLibWebapp
         // For more information on bundling, visit http://go.microsoft.com/fwlink/?LinkId=301862
         public static void RegisterBundles(BundleCollection bundles)
         {
-            bundles.Add(new ScriptBundle("~/bundles/jquery-unobtrusive-ajax").Include(
-                        "~/Scripts/jquery.unobtrusive-ajax.js"));
-
             bundles.Add(new ScriptBundle("~/bundles/jquery-validate").Include(
                         "~/Scripts/jquery.validate.js"));
 
