@@ -10,6 +10,22 @@
         $(function () {
             $("#tabs").tabs();
         });
+
+        $(function () {
+            $('form').submit(function () {
+                if ($(this).valid()) {
+                    $.ajax({
+                        url: this.action,
+                        type: this.method,
+                        data: $(this).serialize(),
+                        success: function (result) {
+                            $('#IdentifyResultId').html(result);
+                        }
+                    });
+                }
+                return false;
+            });
+        });
     </script>
 }
 
@@ -17,18 +33,21 @@
 
 
 <div id="tabs">
-    <ul id="tabs" class="nav nav-tabs" data-tabs="tabs">
+    <ul id="tabSelector" class="nav nav-tabs" data-tabs="tabs">
         <li class="active"><a href="#tabs-1" data-toggle="tab">By identification ID</a></li>
         <li class="active"><a href="#tabs-2" data-toggle="tab">By name and address</a></li>
     </ul>
+
     <div id="my-tab-content" class="tab-content">
-        <div id="tabs-1" class="tab-pane active">
-            @using (Html.BeginForm("Identify", "Identify", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+        <br />
+        <div id="tabs-1" class="tab-pane ">
+            @using (Html.BeginForm("Identify", "Identify", FormMethod.Post, new { @class = "form-horizontal", role = "form", id = "form1" }))
             {
                 @Html.AntiForgeryToken()
+                @Html.ValidationSummary(true)
                 <div class="form-group">
                     <div class="col-md-10">
-                         @Html.DropDownListFor(model => model.IdentificationType, Enum.GetNames(typeof(IdentificationType)).Select(e => new SelectListItem { Text = e }))
+                        @Html.DropDownListFor(model => model.IdentificationType, Enum.GetNames(typeof(IdentificationType)).Select(e => new SelectListItem { Text = e }))
                         @Html.TextBoxFor(model => model.IdentificationValue)
                         <input type="submit" class="btn btn-default" value="Identify" />
                     </div>
@@ -36,23 +55,30 @@
             }
         </div>
 
-        <div id="tabs-2"  class="tab-pane">
-            @using (Html.BeginForm("IdentifyByNameAndAddress", "Identify", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+        <div id="tabs-2" class="tab-pane">
+            @using (Html.BeginForm("IdentifyByNameAndAddress", "Identify", FormMethod.Post, new { @class = "form-horizontal", role = "form",id="form1" }))
             {
                 @Html.AntiForgeryToken()
+                @Html.ValidationSummary(true)
                 <div class="form-group">
                     <div class="col-md-10">
-                        <p>@Html.LabelFor(m => Model.FullName) : @Html.TextBoxFor(model => model.FullName) <br/></p>
-                        <p>@Html.LabelFor(m => Model.AddressLine1) : @Html.TextBoxFor(model => model.AddressLine1)<br /></p>
-                        <p>@Html.LabelFor(m => Model.PostalCode) : @Html.TextBoxFor(model => model.PostalCode)<br /></p>
-                        <p>@Html.LabelFor(m => Model.City) : @Html.TextBoxFor(model => model.City)<br /></p>
+                        <p>
+                            @Html.LabelFor(m => Model.FullName) : @Html.TextBoxFor(model => model.FullName) <br />
+                        </p>
+                        <p>
+                            @Html.LabelFor(m => Model.AddressLine1) : @Html.TextBoxFor(model => model.AddressLine1)<br />
+                        </p>
+                        <p>
+                            @Html.LabelFor(m => Model.PostalCode) : @Html.TextBoxFor(model => model.PostalCode)<br />
+                        </p>
+                        <p>
+                            @Html.LabelFor(m => Model.City) : @Html.TextBoxFor(model => model.City)<br />
+                        </p>
                         <input type="submit" class="btn btn-default" value="Identify" />
                     </div>
                 </div>
             }
         </div>
     </div>
-
+    <div id="IdentifyResultId"></div>
 </div>
-
-

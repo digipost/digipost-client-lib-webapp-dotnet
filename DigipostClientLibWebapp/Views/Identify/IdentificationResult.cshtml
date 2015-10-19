@@ -2,12 +2,13 @@
 
 @{
     ViewBag.Title = "Identification result";
-    
+
 }
 
-<h2>@ViewBag.Title</h2>
-<h3>@Html.LabelFor(m => Model.ResultType) : @Html.LabelForModel(Model.ResultType.ToString())</h3>
-<div>
-    <p>@Html.LabelFor(m => Model.Error) : @Html.LabelForModel(Model.Error.ToString())</p>
-    <p>@Html.LabelFor(m => Model.Data) : @Html.LabelForModel(Model.Data)</p>
+<div class="jumbotron">
+    <h4>@Html.LabelFor(m => Model.ResultType) : @Html.LabelForModel(Model.ResultType.ToString())</h4>
+    <div>
+        <p>@Html.LabelFor(m => Model.Error) : @Html.LabelForModel(Model.Error.ToString())</p>
+        <p>@Html.LabelFor(m => Model.Data) : @Html.LabelForModel(Model.Data)</p>
+    </div>
 </div>

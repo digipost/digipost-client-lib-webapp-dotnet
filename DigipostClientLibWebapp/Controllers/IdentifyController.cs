@@ -33,7 +33,7 @@ namespace DigipostClientLibWebapp.Controllers
             
             var result = await GetDigipostService().Identify(identification);
 
-            return View("IdentificationResult",result);
+            return PartialView("IdentificationResult", result);
         }
 
         public async Task<ActionResult> IdentifyByNameAndAddress(IdentifyModel identifyModel)
@@ -43,7 +43,8 @@ namespace DigipostClientLibWebapp.Controllers
             
             var result = await GetDigipostService().Identify(identification);
 
-            return View("IdentificationResult", result);
+            return PartialView("IdentificationResult", result);
+            
         }
     }
 }

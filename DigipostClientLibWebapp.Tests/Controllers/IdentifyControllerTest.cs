@@ -1,35 +1,29 @@
-﻿using Digipost.Api.Client.Domain;
+﻿using System.Web;
+using System.Web.Mvc;
+using System.Web.Routing;
 using Digipost.Api.Client.Domain.Enums;
 using Digipost.Api.Client.Domain.Identify;
-using Digipost.Api.Client.Domain.SendMessage;
 using DigipostClientLibWebapp.Controllers;
+using DigipostClientLibWebapp.Models;
 using DigipostClientLibWebapp.Services.Digipost;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Web;
-using System.Web.Mvc;
-using System.Web.Routing;
 
 namespace DigipostClientLibWebapp.Tests.Controllers
 {
     [TestClass]
     public class IdentifyControllerTest
     {
-        private const string digipostAddress = "kristian.sæther.enge#8PWF";
+        private const string DigipostAddress = "Testulf.testesen#8PWF";
 
         [TestMethod]
         public void Index()
         {
             // Arrange
-            IdentifyController controller = new IdentifyController();
+            var controller = new IdentifyController();
 
             // Act
-            ViewResult result = controller.Index() as ViewResult;
+            var result = controller.Index() as ViewResult;
 
             // Assert
             Assert.IsNotNull(result);
@@ -39,28 +33,59 @@ namespace DigipostClientLibWebapp.Tests.Controllers
         public void Identify()
         {
             // Arrange
-            Identification identification = new Identification(new RecipientById(IdentificationType.DigipostAddress, digipostAddress));
-            IdentificationResult identificationResult = new IdentificationResult(IdentificationResultType.DigipostAddress, digipostAddress);
-            IdentifyController controller =  IdentifyControllerWithMockedDigipostServiceAndSessionState(identification,identificationResult);
-            
+            var identification = new IdentifyModel
+            {
+                IdentificationType = IdentificationType.DigipostAddress,
+                IdentificationValue = DigipostAddress
+            };
+            var identificationResult = new IdentificationResult(IdentificationResultType.DigipostAddress,
+                DigipostAddress);
+            var controller = IdentifyControllerWithMockedDigipostServiceAndSessionState(identificationResult);
+
             // Act
-            ViewResult result = controller.Identify(identification).Result as ViewResult;
-            
+            var result = controller.Identify(identification).Result as PartialViewResult;
+
             // Assert
             Assert.IsNotNull(result);
             var viewName = result.ViewName;
             Assert.AreEqual("IdentificationResult", viewName);
-            Assert.IsInstanceOfType(result.Model, typeof(IdentificationResult));
+            Assert.IsInstanceOfType(result.Model, typeof (IdentificationResult));
             var viewModel = result.Model as IdentificationResult;
-            Assert.AreEqual(digipostAddress, viewModel.Data);
-
+            Assert.AreEqual(DigipostAddress, viewModel.Data);
         }
 
-        private static IdentifyController IdentifyControllerWithMockedDigipostServiceAndSessionState(Identification identification,
-         IdentificationResult identificationResult)
+        [TestMethod]
+        public void IdentifyByNameAndAddress()
+        {
+            // Arrange
+            var identification = new IdentifyModel
+            {
+                FullName = "Testulf testesen",
+                AddressLine1 = "Vegen bortafor vegen",
+                PostalCode = "0401",
+                City = "Mordor"
+            };
+            var identificationResult = new IdentificationResult(IdentificationResultType.DigipostAddress,
+                DigipostAddress);
+            var controller = IdentifyControllerWithMockedDigipostServiceAndSessionState(identificationResult);
+
+            // Act
+            var result = controller.IdentifyByNameAndAddress(identification).Result as PartialViewResult;
+
+            // Assert
+            Assert.IsNotNull(result);
+            var viewName = result.ViewName;
+            Assert.AreEqual("IdentificationResult", viewName);
+            Assert.IsInstanceOfType(result.Model, typeof (IdentificationResult));
+            var viewModel = result.Model as IdentificationResult;
+            Assert.AreEqual(DigipostAddress, viewModel.Data);
+        }
+
+        private static IdentifyController IdentifyControllerWithMockedDigipostServiceAndSessionState(
+            IdentificationResult identificationResult)
         {
             var digipostService = new Mock<DigipostService>();
-            digipostService.Setup(x => x.Identify(identification)).ReturnsAsync(identificationResult);
+            digipostService.Setup(x => x.Identify(It.IsAny<Identification>())).ReturnsAsync(identificationResult);
             var controller = new IdentifyController(digipostService.Object);
             var context = new Mock<HttpContextBase>();
             var session = new Mock<HttpSessionStateBase>();
@@ -69,6 +94,5 @@ namespace DigipostClientLibWebapp.Tests.Controllers
             controller.ControllerContext = new ControllerContext(requestContext, controller);
             return controller;
         }
-
     }
 }
