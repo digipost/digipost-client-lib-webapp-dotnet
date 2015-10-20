@@ -42,7 +42,7 @@ namespace DigipostClientLibWebapp.Controllers
             byte[] fileContent = null;
             var fileType = "";
 
-            hasError = ValidateView(sendModel, hasError, ref fileContent, ref fileType);
+            hasError = ValidateFileCollection(ref fileContent, ref fileType);
 
             if (hasError)
             {
@@ -53,18 +53,9 @@ namespace DigipostClientLibWebapp.Controllers
             return View("SendStatus", result);
         }
 
-        private bool ValidateView(SendModel sendModel, bool hasError, ref byte[] fileContent, ref string fileType)
+        private bool ValidateFileCollection( ref byte[] fileContent, ref string fileType)
         {
-            if (string.IsNullOrEmpty(sendModel.DigipostAddress))
-            {
-                ModelState.AddModelError("ErrorMessage", "Please add the reciever.");
-                hasError = true;
-            }
-            if (string.IsNullOrEmpty(sendModel.Subject))
-            {
-                ModelState.AddModelError("ErrorMessage", "Please set the subject.");
-                hasError = true;
-            }
+            bool hasError = false;
             if (Request.Files == null || Request.Files.Count < 1)
             {
                 ModelState.AddModelError("ErrorMessage", "Please select a file to send.");
@@ -72,7 +63,7 @@ namespace DigipostClientLibWebapp.Controllers
             }
             else
             {
-                HttpPostedFileBase httpPostedFileBase = sendModel.FileCollection = Request.Files[0];
+                HttpPostedFileBase httpPostedFileBase  = Request.Files[0];
                 if (httpPostedFileBase == null || httpPostedFileBase.ContentLength == 0)
                 {
                     ModelState.AddModelError("ErrorMessage", "Please select a file to send.");

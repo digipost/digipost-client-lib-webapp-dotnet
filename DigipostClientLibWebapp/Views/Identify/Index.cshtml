@@ -5,28 +5,10 @@
     ViewBag.Title = "Identify";
 
 }
-@section scripts {
-    <script type="text/javascript">
-        $(function () {
-            $("#tabs").tabs();
-        });
 
-        $(function () {
-            $('form').submit(function () {
-                if ($(this).valid()) {
-                    $.ajax({
-                        url: this.action,
-                        type: this.method,
-                        data: $(this).serialize(),
-                        success: function (result) {
-                            $('#IdentifyResultId').html(result);
-                        }
-                    });
-                }
-                return false;
-            });
-        });
-    </script>
+
+@section scripts {
+    <script type="text/javascript" src="@Url.Content("/Scripts/IdentifyIndex.js")"></script>
 }
 
 <h2>@ViewBag.Title</h2>

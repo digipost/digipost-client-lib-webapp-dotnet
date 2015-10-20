@@ -9,6 +9,7 @@ namespace DigipostClientLibWebapp.Models
         public string FirstName { get; set; }
         public string MiddleName { get; set; }
         public string LastName { get; set; }
+        [Required(ErrorMessage = "*", AllowEmptyStrings = false)]
         public string DigipostAddress { get; set; }
         public string MobileNumber { get; set; }
         public string OrganizationName { get; set; }
@@ -20,10 +21,9 @@ namespace DigipostClientLibWebapp.Models
         public string ZipCode { get; set; }
         public string City { get; set; }
 
-        [Required]
+        [Required(ErrorMessage = "*")]
         public HttpPostedFileBase FileCollection { get; set; }
-        [Required]
-        [MinLength(1)]
+        [Required(ErrorMessage = "*",AllowEmptyStrings = false)]
         public string Subject { get; set; }
         public bool SmsAfterHour { get;  set; }
         public SensitivityLevel SensitivityOption { get;  set; }

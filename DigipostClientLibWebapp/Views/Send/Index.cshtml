@@ -15,94 +15,100 @@
         @if (Model.FirstName != null)
         {
             <h3>@Html.LabelForModel(Model.FirstName)&nbsp;@Html.LabelForModel(Model.MiddleName)&nbsp;@Html.LabelForModel(Model.LastName)</h3>
-            @Html.HiddenFor(m => Model.FirstName)
-            @Html.HiddenFor(m => Model.MiddleName)
-            @Html.HiddenFor(m => Model.LastName)
-            }
-        @if (Model.MobileNumber != null) {
-            <div>@Html.LabelFor(m => Model.MobileNumber) : @Html.LabelForModel(Model.MobileNumber)</div>
-            @Html.HiddenFor(m => Model.MobileNumber)
+            @Html.HiddenFor(m => m.FirstName)
+            @Html.HiddenFor(m => m.MiddleName)
+            @Html.HiddenFor(m => m.LastName)
+        }
+        @if (Model.MobileNumber != null)
+        {
+            <div>@Html.LabelFor(m => m.MobileNumber) : @Html.LabelForModel(Model.MobileNumber)</div>
+            @Html.HiddenFor(m => m.MobileNumber)
         }
         <div>
-            @if(Model.DigipostAddress != null) {
-                <p> @Html.LabelFor(m => Model.DigipostAddress) : @Html.LabelForModel(Model.DigipostAddress) <br/>
+            @if (Model.DigipostAddress != null)
+            {
+                <p>
+                    @Html.LabelFor(m => m.DigipostAddress) : @Html.LabelForModel(Model.DigipostAddress) <br />
                 </p>
-                @Html.HiddenFor(m => Model.DigipostAddress)
+                @Html.HiddenFor(m => m.DigipostAddress)
             }
             else
             {
-                <p>@Html.LabelFor(m => Model.DigipostAddress) : @Html.TextBoxFor(m => Model.DigipostAddress)</p>
+                <p>@Html.LabelFor(m => m.DigipostAddress) : @Html.TextBoxFor(m => m.DigipostAddress) @Html.ValidationMessageFor(model => model.DigipostAddress)</p>
             }
             @if (Model.City != null)
             {
-                <p> @Html.LabelFor(m => Model.City) : @Html.LabelForModel(Model.City) <br/>
+                <p>
+                    @Html.LabelFor(m => m.City) : @Html.LabelForModel(Model.City) <br />
                 </p>
-                @Html.HiddenFor(m => Model.City)
+                @Html.HiddenFor(m => m.City)
             }
             @if (Model.ZipCode != null)
             {
-                <p> @Html.LabelFor(m => Model.ZipCode) : @Html.LabelForModel(Model.ZipCode) <br/>
+                <p>
+                    @Html.LabelFor(m => m.ZipCode) : @Html.LabelForModel(Model.ZipCode) <br />
                 </p>
-                @Html.HiddenFor(m => Model.ZipCode)
+                @Html.HiddenFor(m => m.ZipCode)
             }
             @if (Model.Street != null)
             {
-                <p> @Html.LabelFor(m => Model.Street) : @Html.LabelForModel(Model.Street) <br/>
+                <p>
+                    @Html.LabelFor(m => m.Street) : @Html.LabelForModel(Model.Street) <br />
                 </p>
-                @Html.HiddenFor(m => Model.Street)
+                @Html.HiddenFor(m => m.Street)
             }
             @if (Model.HouseNumber != null)
             {
-                <p> @Html.LabelFor(m => Model.HouseNumber) : @Html.LabelForModel(Model.HouseNumber) <br/>
+                <p>
+                    @Html.LabelFor(m => m.HouseNumber) : @Html.LabelForModel(Model.HouseNumber) <br />
                 </p>
-                @Html.HiddenFor(m => Model.HouseNumber)
+                @Html.HiddenFor(m => m.HouseNumber)
             }
             @if (!Model.AdditionalAddressLine.IsNullOrWhiteSpace())
             {
-                <p> @Html.LabelFor(m => Model.AdditionalAddressLine) : @Html.LabelForModel(Model.AdditionalAddressLine) <br/>
+                <p>
+                    @Html.LabelFor(m => m.AdditionalAddressLine) : @Html.LabelForModel(Model.AdditionalAddressLine) <br />
                 </p>
-                @Html.HiddenFor(m => Model.AdditionalAddressLine)
+                @Html.HiddenFor(m => m.AdditionalAddressLine)
             }
             @if (Model.HouseLetter != null)
             {
-                <p> @Html.LabelFor(m => Model.HouseLetter) : @Html.LabelForModel(Model.HouseLetter) <br/>
+                <p>
+                    @Html.LabelFor(m => m.HouseLetter) : @Html.LabelForModel(Model.HouseLetter) <br />
                 </p>
-                @Html.HiddenFor(m => Model.HouseLetter)
+                @Html.HiddenFor(m => m.HouseLetter)
             }
 
         </div>
     </div>
-
-   
     <div>
-        <p>@Html.ValidationMessage("ErrorMessage")</p>
-        <p>@Html.LabelFor(m => Model.Subject) &nbsp; @Html.TextBoxFor(m => Model.Subject)</p>
+        <p>@Html.LabelFor(model => model.Subject) &nbsp; @Html.TextBoxFor(model => model.Subject) @Html.ValidationMessageFor(model => model.Subject)</p>
 
-        <input type="file" name="FileCollection"/>
+        <p><input type="file" name="FileCollection" /> @Html.ValidationMessage("ErrorMessage")</p>
         <table>
             <thead>
-            <tr><td>Additional options</td><td></td></tr>
+                <tr><td>Additional options</td><td></td></tr>
             </thead>
             <tbody>
-            <tr><td>Sms notification</td><td>@Html.CheckBoxFor(m => Model.SmsAfterHour) @Html.TextBoxFor(m => Model.SmsAfterHours)</td></tr>
-            <tr>
-                <td>Sensitivity option</td>
-                <td>
-                    @Html.RadioButtonFor(m => Model.SensitivityOption, SensitivityLevel.Normal, true) Normal
-                    @Html.RadioButtonFor(m => Model.SensitivityOption, SensitivityLevel.Sensitive) Sensitive
-                </td>
-            </tr>
-            <tr>
-                <td>Authentication option</td>
-                <td>
-                    @Html.RadioButtonFor(m => Model.AuthenticationOption, AuthenticationLevel.Password) Password
-                    @Html.RadioButtonFor(m => Model.AuthenticationOption, AuthenticationLevel.TwoFactor) TwoFactor
-                </td>
-            </tr>
+                <tr><td>Sms notification</td><td>@Html.CheckBoxFor(m => Model.SmsAfterHour) @Html.TextBoxFor(m => Model.SmsAfterHours)</td></tr>
+                <tr>
+                    <td>Sensitivity option</td>
+                    <td>
+                        @Html.RadioButtonFor(m => Model.SensitivityOption, SensitivityLevel.Normal, true) Normal
+                        @Html.RadioButtonFor(m => Model.SensitivityOption, SensitivityLevel.Sensitive) Sensitive
+                    </td>
+                </tr>
+                <tr>
+                    <td>Authentication option</td>
+                    <td>
+                        @Html.RadioButtonFor(m => Model.AuthenticationOption, AuthenticationLevel.Password) Password
+                        @Html.RadioButtonFor(m => Model.AuthenticationOption, AuthenticationLevel.TwoFactor) TwoFactor
+                    </td>
+                </tr>
             </tbody>
         </table>
 
-        <input type="submit" name="Submit" id="Submit" value="Send"/>
+        <input type="submit" name="Submit" id="Submit" value="Send" />
 
     </div>
 }
