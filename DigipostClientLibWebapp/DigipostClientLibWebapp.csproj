@@ -45,19 +45,19 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="ApiClientShared, Version=1.0.5637.25994, Culture=neutral, PublicKeyToken=6e0e24e0c7886562, processorArchitecture=MSIL">
-      <HintPath>..\packages\digipost-api-client.6.2.5773.22836-beta\lib\net45\ApiClientShared.dll</HintPath>
+      <HintPath>..\packages\digipost-api-client.6.2.5773.23452\lib\net45\ApiClientShared.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Difi.Felles.Utility, Version=0.1.5598.25086, Culture=neutral, PublicKeyToken=bd8139acc70008cb, processorArchitecture=MSIL">
-      <HintPath>..\packages\digipost-api-client.6.2.5773.22836-beta\lib\net45\Difi.Felles.Utility.dll</HintPath>
+      <HintPath>..\packages\digipost-api-client.6.2.5773.23452\lib\net45\Difi.Felles.Utility.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Digipost.Api.Client, Version=6.2.5773.22836, Culture=neutral, PublicKeyToken=683b8efceae684a6, processorArchitecture=MSIL">
-      <HintPath>..\packages\digipost-api-client.6.2.5773.22836-beta\lib\net45\Digipost.Api.Client.dll</HintPath>
+    <Reference Include="Digipost.Api.Client, Version=6.2.5773.23452, Culture=neutral, PublicKeyToken=683b8efceae684a6, processorArchitecture=MSIL">
+      <HintPath>..\packages\digipost-api-client.6.2.5773.23452\lib\net45\Digipost.Api.Client.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Digipost.Api.Client.Domain, Version=6.2.5773.22835, Culture=neutral, PublicKeyToken=683b8efceae684a6, processorArchitecture=MSIL">
-      <HintPath>..\packages\digipost-api-client.6.2.5773.22836-beta\lib\net45\Digipost.Api.Client.Domain.dll</HintPath>
+    <Reference Include="Digipost.Api.Client.Domain, Version=6.2.5773.23452, Culture=neutral, PublicKeyToken=683b8efceae684a6, processorArchitecture=MSIL">
+      <HintPath>..\packages\digipost-api-client.6.2.5773.23452\lib\net45\Digipost.Api.Client.Domain.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="log4net, Version=1.2.13.0, Culture=neutral, PublicKeyToken=669e0ddf0bb1aa2a, processorArchitecture=MSIL">
@@ -205,6 +205,7 @@
     </Compile>
     <Compile Include="Services\Digipost\DigipostService.cs" />
     <Compile Include="Startup.cs" />
+    <Compile Include="Utilities\SessionManager.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\bootstrap.css" />
@@ -293,7 +294,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Views\ControllerBase\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff" />
