@@ -8,7 +8,9 @@ namespace DigipostClientLibWebapp.Utilities
     {
         public static T GetFromSession<T>()
         {
-            return (T) System.Web.HttpContext.Current.Session[SessionConstants.PersonDetails];
+            var sessionData = System.Web.HttpContext.Current.Session[SessionConstants.PersonDetails];
+            
+            return sessionData == null ? default(T) : (T) sessionData;
         }
 
         public static void AddToSession<T>(T value)
