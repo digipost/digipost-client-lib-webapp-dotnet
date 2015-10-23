@@ -30,17 +30,17 @@ namespace DigipostClientLibWebapp.Controllers
         {
             var searchResult = await GetDigipostService().Search(search);
 
-            SessionManager.AddToSession(searchResult);
+            SessionManager.AddToSession(SessionConstants.PersonDetails, searchResult);
 
             return View("Index",searchResult.PersonDetails); 
         }
 
         public ActionResult GoToSend(string digipostAddress)
         {
-            var personDetails = SessionManager.GetFromSession<ISearchDetailsResult>();
+            var personDetails = SessionManager.GetFromSession<ISearchDetailsResult>(SessionConstants.PersonDetails);
             var person = personDetails.PersonDetails.Find(details => details.DigipostAddress.Equals(digipostAddress));
             
-            Session[SessionConstants.PersonModel] = person;
+            SessionManager.AddToSession(SessionConstants.PersonModel, person);
             return RedirectToAction("Index", "Send");
         }
     }
