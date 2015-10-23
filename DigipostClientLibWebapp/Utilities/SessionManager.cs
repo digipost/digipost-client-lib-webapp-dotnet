@@ -1,8 +1,4 @@
-﻿using System.Runtime.InteropServices.ComTypes;
-using Digipost.Api.Client.Domain.Search;
-using DigipostClientLibWebapp.Constants;
-
-namespace DigipostClientLibWebapp.Utilities
+﻿namespace DigipostClientLibWebapp.Utilities
 {
     public static class SessionManager
     {
