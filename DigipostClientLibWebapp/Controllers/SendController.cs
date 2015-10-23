@@ -1,20 +1,24 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
+using System.Web.SessionState;
 using Digipost.Api.Client.Domain.Search;
 using DigipostClientLibWebapp.Constants;
 using DigipostClientLibWebapp.Models;
 using DigipostClientLibWebapp.Services.Digipost;
+using DigipostClientLibWebapp.Utilities;
+using Microsoft.Ajax.Utilities;
 
 namespace DigipostClientLibWebapp.Controllers
 {
     public class SendController : ControllerBase
     {
-        public SendController() : base()
+        public SendController()
         {
-
         }
+
         public SendController(DigipostService digipostService) : base(digipostService)
         {
 
@@ -23,26 +27,38 @@ namespace DigipostClientLibWebapp.Controllers
         [HttpGet]
         public ActionResult Index(SendModel sendModel)
         {
-            if (sendModel == null || string.IsNullOrEmpty(sendModel.DigipostAddress))
+            var isEmptyModel = string.IsNullOrEmpty(sendModel.DigipostAddress);
+
+            if (isEmptyModel)
             {
-                var searchDetails = (SearchDetails)Session[SessionConstants.PersonModel];
-                if (searchDetails == null)
-                    return View("Index", new SendModel());
-                sendModel = Converter.SearchDetailsToSendModel(searchDetails);
-                Session.Remove(SessionConstants.PersonModel);
+                sendModel = GetSendModelFromSession();
             }
+
             return View("Index", sendModel);
         }
 
+        private SendModel GetSendModelFromSession()
+        {
+            var searchDetails = SessionManager.GetFromSession<SearchDetails>(SessionConstants.PersonModel);
+
+            SendModel sendModel = new SendModel();
+            if (searchDetails != null)
+            {
+                sendModel = Converter.SearchDetailsToSendModel(searchDetails);
+            }
+
+            SessionManager.RemoveFromSession(SessionConstants.PersonModel);
+
+            return sendModel;
+        }
 
         [HttpPost]
         public async Task<ActionResult> Send(SendModel sendModel)
         {
-            bool hasError = false;
             byte[] fileContent = null;
             var fileType = "";
 
-            hasError = ValidateFileCollection(ref fileContent, ref fileType);
+            var hasError = IsValidFileContent(ref fileContent, ref fileType);
 
             if (hasError)
             {
@@ -53,33 +69,57 @@ namespace DigipostClientLibWebapp.Controllers
             return View("SendStatus", result);
         }
 
-        private bool ValidateFileCollection( ref byte[] fileContent, ref string fileType)
+        private bool IsValidFileContent( ref byte[] fileContent, ref string fileType)
         {
-            bool hasError = false;
-            if (Request.Files == null || Request.Files.Count < 1)
+            bool hasError = IsFileSelected();
+
+            HttpPostedFileBase httpPostedFileBase = Request.Files[0];
+            if (!hasError)
             {
-                ModelState.AddModelError("ErrorMessage", "Please select a file to send.");
-                hasError = true;
-            }
-            else
-            {
-                HttpPostedFileBase httpPostedFileBase  = Request.Files[0];
                 if (httpPostedFileBase == null || httpPostedFileBase.ContentLength == 0)
                 {
                     ModelState.AddModelError("ErrorMessage", "Please select a file to send.");
                     hasError = true;
                 }
-                using (var binaryReader = new BinaryReader(httpPostedFileBase.InputStream))
-                {
-                    fileContent = binaryReader.ReadBytes(httpPostedFileBase.ContentLength);
-                }
-                fileType = Converter.MimeTypeToDigipostFileType(httpPostedFileBase.ContentType);
+            }
+
+            if (!hasError)
+            {
+                GetFileContent(out fileContent, httpPostedFileBase);
+                GetMimeType(out fileType, httpPostedFileBase);
+
                 if (string.IsNullOrEmpty(fileType))
                 {
                     ModelState.AddModelError("ErrorMessage", "Unknown filetype, supported types is [.PDF, .TXT]");
                     hasError = true;
                 }
             }
+            
+            return hasError;
+        }
+
+        private static void GetMimeType(out string fileType, HttpPostedFileBase httpPostedFileBase)
+        {
+            fileType = Converter.MimeTypeToDigipostFileType(httpPostedFileBase.ContentType);
+        }
+
+        private static void GetFileContent(out byte[] fileContent, HttpPostedFileBase httpPostedFileBase)
+        {
+            using (var binaryReader = new BinaryReader(httpPostedFileBase.InputStream))
+            {
+                fileContent = binaryReader.ReadBytes(httpPostedFileBase.ContentLength);
+            }
+        }
+
+        private bool IsFileSelected()
+        {
+            var hasError = false;
+            if (Request.Files == null || Request.Files.Count < 1)
+            {
+                ModelState.AddModelError("ErrorMessage", "Please select a file to send.");
+                hasError = true;
+            }
+
             return hasError;
         }
     }
