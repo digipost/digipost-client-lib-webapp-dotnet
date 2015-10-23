@@ -1,34 +1,23 @@
-﻿using System;
-using System.IO;
+﻿using System.IO;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
-using Digipost.Api.Client.Domain.Enums;
 using Digipost.Api.Client.Domain.Search;
-using Digipost.Api.Client.Domain.SendMessage;
 using DigipostClientLibWebapp.Constants;
 using DigipostClientLibWebapp.Models;
 using DigipostClientLibWebapp.Services.Digipost;
 
 namespace DigipostClientLibWebapp.Controllers
 {
-    public class SendController : Controller
+    public class SendController : ControllerBase
     {
-        private readonly DigipostService _digipostService;
-
-        public SendController(DigipostService digipostService)
+        public SendController() : base()
         {
-            _digipostService = digipostService;
+
         }
-
-        public SendController()
+        public SendController(DigipostService digipostService) : base(digipostService)
         {
-            _digipostService = new DigipostService();
-        }
 
-        private DigipostService GetDigipostService()
-        {
-            return _digipostService ?? new DigipostService();
         }
 
         [HttpGet]
@@ -53,7 +42,7 @@ namespace DigipostClientLibWebapp.Controllers
             byte[] fileContent = null;
             var fileType = "";
 
-            hasError = ValidateView(sendModel, hasError, ref fileContent, ref fileType);
+            hasError = ValidateFileCollection(ref fileContent, ref fileType);
 
             if (hasError)
             {
@@ -64,18 +53,9 @@ namespace DigipostClientLibWebapp.Controllers
             return View("SendStatus", result);
         }
 
-        private bool ValidateView(SendModel sendModel, bool hasError, ref byte[] fileContent, ref string fileType)
+        private bool ValidateFileCollection( ref byte[] fileContent, ref string fileType)
         {
-            if (string.IsNullOrEmpty(sendModel.DigipostAddress))
-            {
-                ModelState.AddModelError("ErrorMessage", "Please add the reciever.");
-                hasError = true;
-            }
-            if (string.IsNullOrEmpty(sendModel.Subject))
-            {
-                ModelState.AddModelError("ErrorMessage", "Please set the subject.");
-                hasError = true;
-            }
+            bool hasError = false;
             if (Request.Files == null || Request.Files.Count < 1)
             {
                 ModelState.AddModelError("ErrorMessage", "Please select a file to send.");
@@ -83,7 +63,7 @@ namespace DigipostClientLibWebapp.Controllers
             }
             else
             {
-                HttpPostedFileBase httpPostedFileBase = sendModel.FileCollection = Request.Files[0];
+                HttpPostedFileBase httpPostedFileBase  = Request.Files[0];
                 if (httpPostedFileBase == null || httpPostedFileBase.ContentLength == 0)
                 {
                     ModelState.AddModelError("ErrorMessage", "Please select a file to send.");
@@ -95,7 +75,7 @@ namespace DigipostClientLibWebapp.Controllers
                 }
                 fileType = Converter.MimeTypeToDigipostFileType(httpPostedFileBase.ContentType);
                 if (string.IsNullOrEmpty(fileType))
-                {   
+                {
                     ModelState.AddModelError("ErrorMessage", "Unknown filetype, supported types is [.PDF, .TXT]");
                     hasError = true;
                 }
