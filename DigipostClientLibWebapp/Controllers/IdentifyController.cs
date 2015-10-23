@@ -2,6 +2,7 @@
 using Digipost.Api.Client.Domain.Identify;
 using DigipostClientLibWebapp.Services.Digipost;
 using System.Threading.Tasks;
+using Digipost.Api.Client.Domain.Enums;
 using Digipost.Api.Client.Domain.SendMessage;
 using DigipostClientLibWebapp.Models;
 
@@ -42,7 +43,7 @@ namespace DigipostClientLibWebapp.Controllers
             identification = new Identification(new RecipientByNameAndAddress(identifyModel.FullName, identifyModel.AddressLine1, identifyModel.PostalCode, identifyModel.City));
             
             var result = await GetDigipostService().Identify(identification);
-
+            
             return PartialView("IdentificationResult", result);
             
         }
