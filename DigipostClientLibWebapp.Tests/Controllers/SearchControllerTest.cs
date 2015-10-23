@@ -77,7 +77,7 @@ namespace DigipostClientLibWebapp.Tests.Controllers
             Assert.AreEqual("Index", result.RouteValues["action"]);
         }
 
-        private static SearchController SearchControllerWithMockedSessionState(SearchDetailsResult searchDetailsResult)
+        private static SearchController SearchControllerWithMockedSessionState(ISearchDetailsResult searchDetailsResult)
         {
             var controller = new SearchController();
             var context = new Mock<HttpContextBase>();
