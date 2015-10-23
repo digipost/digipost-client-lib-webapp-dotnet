@@ -20,7 +20,7 @@ namespace DigipostClientLibWebapp.Controllers
             
         }
 
-        public ActionResult Index(List<SearchDetails> search)
+        public ActionResult Index(IEnumerable<SearchDetails> search)
         {
             return View(search);
         }
