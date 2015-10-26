@@ -18,18 +18,14 @@ namespace DigipostClientLibWebapp.Controllers
             _digipostService = digipostService;
         }
 
-        // GET: Identify
         public ActionResult Index()
         {
-
             return View();
         }
 
-        // GET: Identify/Identify/
-        public async Task<ActionResult> Identify(IdentifyModel identifyModel)
+        public async Task<ActionResult> IdentifyById(IdentifyModel identifyModel)
         {
-            Identification identification = null;
-            identification = new Identification(new RecipientById(identifyModel.IdentificationType, identifyModel.IdentificationValue));
+            var identification = new Identification(new RecipientById(identifyModel.IdentificationType, identifyModel.IdentificationValue));
             
             var result = await _digipostService.Identify(identification);
 
@@ -38,14 +34,11 @@ namespace DigipostClientLibWebapp.Controllers
 
         public async Task<ActionResult> IdentifyByNameAndAddress(IdentifyModel identifyModel)
         {
-            Identification identification = null;
-            identification = new Identification(new RecipientByNameAndAddress(identifyModel.FullName, identifyModel.AddressLine1, identifyModel.PostalCode, identifyModel.City));
+            var identification = new Identification(new RecipientByNameAndAddress(identifyModel.FullName, identifyModel.AddressLine1, identifyModel.PostalCode, identifyModel.City));
             
             var result = await _digipostService.Identify(identification);
             
             return PartialView("IdentificationResult", result);
-            
         }
-        
     }
 }

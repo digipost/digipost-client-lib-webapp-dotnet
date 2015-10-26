@@ -6,7 +6,6 @@
 
 }
 
-
 @section scripts {
     <script type="text/javascript" src="@Url.Content("/Scripts/IdentifyIndex.js")"></script>
 }
@@ -16,14 +15,14 @@
 
 <div id="tabs">
     <ul id="tabSelector" class="nav nav-tabs" data-tabs="tabs">
-        <li class="active"><a href="#tabs-1" data-toggle="tab">By identification ID</a></li>
-        <li class="active"><a href="#tabs-2" data-toggle="tab">By name and address</a></li>
+        <li class="active"><a href="#tab-ById" data-toggle="tab">By identification ID</a></li>
+        <li class="active"><a href="#tab-ByNameAndAddress" data-toggle="tab">By name and address</a></li>
     </ul>
 
     <div id="my-tab-content" class="tab-content">
         <br />
-        <div id="tabs-1" class="tab-pane ">
-            @using (Html.BeginForm("Identify", "Identify", FormMethod.Post, new { @class = "form-horizontal", role = "form", id = "form1" }))
+        <div id="tab-ById" class="tab-pane ">
+            @using (Html.BeginForm("IdentifyById", "Identify", FormMethod.Post, new { @class = "form-horizontal", role = "form", id = "form1" }))
             {
                 @Html.AntiForgeryToken()
                 @Html.ValidationSummary(true)
@@ -37,7 +36,7 @@
             }
         </div>
 
-        <div id="tabs-2" class="tab-pane">
+        <div id="tab-ByNameAndAddress" class="tab-pane">
             @using (Html.BeginForm("IdentifyByNameAndAddress", "Identify", FormMethod.Post, new { @class = "form-horizontal", role = "form",id="form1" }))
             {
                 @Html.AntiForgeryToken()

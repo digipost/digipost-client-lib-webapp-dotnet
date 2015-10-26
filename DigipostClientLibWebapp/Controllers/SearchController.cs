@@ -24,8 +24,7 @@ namespace DigipostClientLibWebapp.Controllers
 
         [HttpPost]
         public async Task<ActionResult> Search(string search)
-        {
-            
+        {   
             var searchResult = await _digipostService.Search(search);
             
             SessionManager.AddToSession(HttpContext,SessionConstants.PersonDetails, searchResult);

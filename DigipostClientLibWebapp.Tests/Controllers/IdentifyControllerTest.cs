@@ -44,7 +44,7 @@ namespace DigipostClientLibWebapp.Tests.Controllers
             var controller = IdentifyControllerWithMockedDigipostServiceAndSessionState(identificationResult);
 
             // Act
-            var result = controller.Identify(identification).Result as PartialViewResult;
+            var result = controller.IdentifyById(identification).Result as PartialViewResult;
 
             // Assert
             Assert.IsNotNull(result);
