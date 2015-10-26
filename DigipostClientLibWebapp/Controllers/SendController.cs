@@ -10,18 +10,19 @@ using DigipostClientLibWebapp.Utilities;
 
 namespace DigipostClientLibWebapp.Controllers
 {
-    public class SendController : ControllerBase
+    public class SendController : Controller
     {
-        public SendController(){ }
-        public SendController(DigipostService digipostService) : base(digipostService)
+        private readonly IDigipostService _digipostService;
+        
+        public SendController(IDigipostService digipostService)
         {
-
+            _digipostService = digipostService;
         }
 
         [HttpGet]
         public ActionResult Index(SendModel sendModel)
         {
-            var isEmptyModel = string.IsNullOrEmpty(sendModel.DigipostAddress);
+            var isEmptyModel = sendModel == null || string.IsNullOrEmpty(sendModel.DigipostAddress);
 
             if (isEmptyModel)
             {
@@ -59,7 +60,7 @@ namespace DigipostClientLibWebapp.Controllers
                 return View("Index", sendModel);
             }
 
-            var result = await GetDigipostService().Send(fileContent, fileType, sendModel);
+            var result = await _digipostService.Send(fileContent, fileType, sendModel);
             return View("SendStatus", result);
         }
 

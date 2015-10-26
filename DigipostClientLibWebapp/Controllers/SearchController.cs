@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
-using System.Web;
 using System.Web.Mvc;
 using Digipost.Api.Client.Domain.Search;
 using DigipostClientLibWebapp.Constants;
@@ -9,15 +8,13 @@ using DigipostClientLibWebapp.Utilities;
 
 namespace DigipostClientLibWebapp.Controllers
 {
-    public class SearchController : ControllerBase
+    public class SearchController : Controller
     {
-        public SearchController()
+        private readonly IDigipostService _digipostService;
+        
+        public SearchController(IDigipostService digipostService)
         {
-            
-        }
-        public SearchController(DigipostService digipostService) : base(digipostService)
-        {
-
+            _digipostService = digipostService;
         }
 
         public ActionResult Index(IEnumerable<SearchDetails> search)
@@ -29,8 +26,8 @@ namespace DigipostClientLibWebapp.Controllers
         public async Task<ActionResult> Search(string search)
         {
             
-            var searchResult = await GetDigipostService().Search(search);
-
+            var searchResult = await _digipostService.Search(search);
+            
             SessionManager.AddToSession(HttpContext,SessionConstants.PersonDetails, searchResult);
 
             return View("Index", searchResult.PersonDetails);

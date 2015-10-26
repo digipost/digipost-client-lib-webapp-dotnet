@@ -20,7 +20,8 @@ namespace DigipostClientLibWebapp.Tests.Controllers
         public void Index()
         {
             // Arrange
-            var controller = new IdentifyController();
+            var serviceMock = new Mock<IDigipostService>();
+            var controller = new IdentifyController(serviceMock.Object);
 
             // Act
             var result = controller.Index() as ViewResult;

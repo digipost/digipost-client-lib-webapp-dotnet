@@ -9,15 +9,13 @@ using DigipostClientLibWebapp.Models;
 
 namespace DigipostClientLibWebapp.Controllers
 {
-    public class IdentifyController : ControllerBase
+    public class IdentifyController : Controller
     {
-        public IdentifyController() : base()
-        {
+        private readonly IDigipostService _digipostService;
 
-        }
-        public IdentifyController(DigipostService digipostService) : base(digipostService)
+        public IdentifyController(IDigipostService digipostService)
         {
-
+            _digipostService = digipostService;
         }
 
         // GET: Identify
@@ -33,7 +31,7 @@ namespace DigipostClientLibWebapp.Controllers
             Identification identification = null;
             identification = new Identification(new RecipientById(identifyModel.IdentificationType, identifyModel.IdentificationValue));
             
-            var result = await GetDigipostService().Identify(identification);
+            var result = await _digipostService.Identify(identification);
 
             return PartialView("IdentificationResult", result);
         }
@@ -43,7 +41,7 @@ namespace DigipostClientLibWebapp.Controllers
             Identification identification = null;
             identification = new Identification(new RecipientByNameAndAddress(identifyModel.FullName, identifyModel.AddressLine1, identifyModel.PostalCode, identifyModel.City));
             
-            var result = await GetDigipostService().Identify(identification);
+            var result = await _digipostService.Identify(identification);
             
             return PartialView("IdentificationResult", result);
             

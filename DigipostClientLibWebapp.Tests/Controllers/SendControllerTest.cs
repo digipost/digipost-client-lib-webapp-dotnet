@@ -39,7 +39,8 @@ namespace DigipostClientLibWebapp.Tests.Controllers
 
         private static SendController SendControllerWithMockedRequestContext(SearchDetails person)
         {
-            var controller = new SendController();
+            var digipostServiceMock = new Mock<IDigipostService>();
+            var controller = new SendController(digipostServiceMock.Object);
             var mockedRequestContext = MockedRequestContextWithSessionState(person);
             controller.ControllerContext = new ControllerContext(mockedRequestContext, controller);
             return controller;
@@ -58,8 +59,9 @@ namespace DigipostClientLibWebapp.Tests.Controllers
         [TestMethod]
         public void Index()
         {
-            // Arragne
-            var controller = new SendController();
+            // Arrange
+            var digipostServiceMock = new Mock<IDigipostService>();
+            var controller = new SendController(digipostServiceMock.Object);
             var person = TestHelper.GetSearchDetailsResult().PersonDetails[0];
             var sendModel = Converter.SearchDetailsToSendModel(person);
 

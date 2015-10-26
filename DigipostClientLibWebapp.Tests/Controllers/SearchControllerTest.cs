@@ -18,7 +18,8 @@ namespace DigipostClientLibWebapp.Tests.Controllers
         public void Index()
         {
             // Arrange
-            var controller = new SearchController();
+            Mock<IDigipostService> digipostServiceMock = new Mock<IDigipostService>();
+            var controller = new SearchController(digipostServiceMock.Object);
 
             // Act
             var result = controller.Index(null) as ViewResult;
@@ -79,7 +80,8 @@ namespace DigipostClientLibWebapp.Tests.Controllers
 
         private static SearchController SearchControllerWithMockedSessionState(ISearchDetailsResult searchDetailsResult)
         {
-            var controller = new SearchController();
+            var digipostServiceMock =new Mock<IDigipostService>();
+            var controller = new SearchController(digipostServiceMock.Object);
             var context = new Mock<HttpContextBase>();
             var session = new Mock<HttpSessionStateBase>();
             session.Setup(x => x[SessionConstants.PersonDetails]).Returns(searchDetailsResult);
