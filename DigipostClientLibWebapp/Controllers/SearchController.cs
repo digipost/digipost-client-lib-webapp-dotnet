@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
+using System.Web;
 using System.Web.Mvc;
 using Digipost.Api.Client.Domain.Search;
 using DigipostClientLibWebapp.Constants;
@@ -10,14 +11,13 @@ namespace DigipostClientLibWebapp.Controllers
 {
     public class SearchController : ControllerBase
     {
-        public SearchController() : base()
+        public SearchController()
         {
             
         }
-
         public SearchController(DigipostService digipostService) : base(digipostService)
         {
-            
+
         }
 
         public ActionResult Index(IEnumerable<SearchDetails> search)
@@ -28,20 +28,23 @@ namespace DigipostClientLibWebapp.Controllers
         [HttpPost]
         public async Task<ActionResult> Search(string search)
         {
+            
             var searchResult = await GetDigipostService().Search(search);
 
-            SessionManager.AddToSession(SessionConstants.PersonDetails, searchResult);
+            SessionManager.AddToSession(HttpContext,SessionConstants.PersonDetails, searchResult);
 
-            return View("Index",searchResult.PersonDetails); 
+            return View("Index", searchResult.PersonDetails);
         }
 
         public ActionResult GoToSend(string digipostAddress)
         {
-            var personDetails = SessionManager.GetFromSession<ISearchDetailsResult>(SessionConstants.PersonDetails);
+            var personDetails = SessionManager.GetFromSession<ISearchDetailsResult>(HttpContext, SessionConstants.PersonDetails);
             var person = personDetails.PersonDetails.Find(details => details.DigipostAddress.Equals(digipostAddress));
+
+            SessionManager.AddToSession(HttpContext, SessionConstants.PersonModel, person);
             
-            SessionManager.AddToSession(SessionConstants.PersonModel, person);
             return RedirectToAction("Index", "Send");
         }
+        
     }
 }

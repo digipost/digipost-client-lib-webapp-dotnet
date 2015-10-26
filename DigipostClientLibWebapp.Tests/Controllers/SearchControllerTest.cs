@@ -83,9 +83,12 @@ namespace DigipostClientLibWebapp.Tests.Controllers
             var context = new Mock<HttpContextBase>();
             var session = new Mock<HttpSessionStateBase>();
             session.Setup(x => x[SessionConstants.PersonDetails]).Returns(searchDetailsResult);
+            
             context.Setup(x => x.Session).Returns(session.Object);
+            
             var requestContext = new RequestContext(context.Object, new RouteData());
             controller.ControllerContext = new ControllerContext(requestContext, controller);
+            
             return controller;
         }
     }

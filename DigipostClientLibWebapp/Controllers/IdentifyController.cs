@@ -2,6 +2,7 @@
 using Digipost.Api.Client.Domain.Identify;
 using DigipostClientLibWebapp.Services.Digipost;
 using System.Threading.Tasks;
+using System.Web;
 using Digipost.Api.Client.Domain.Enums;
 using Digipost.Api.Client.Domain.SendMessage;
 using DigipostClientLibWebapp.Models;
@@ -47,5 +48,6 @@ namespace DigipostClientLibWebapp.Controllers
             return PartialView("IdentificationResult", result);
             
         }
+        
     }
 }

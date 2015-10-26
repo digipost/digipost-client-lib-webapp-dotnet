@@ -1,24 +1,18 @@
-﻿using System;
-using System.IO;
+﻿using System.IO;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
-using System.Web.SessionState;
 using Digipost.Api.Client.Domain.Search;
 using DigipostClientLibWebapp.Constants;
 using DigipostClientLibWebapp.Models;
 using DigipostClientLibWebapp.Services.Digipost;
 using DigipostClientLibWebapp.Utilities;
-using Microsoft.Ajax.Utilities;
 
 namespace DigipostClientLibWebapp.Controllers
 {
     public class SendController : ControllerBase
     {
-        public SendController()
-        {
-        }
-
+        public SendController(){ }
         public SendController(DigipostService digipostService) : base(digipostService)
         {
 
@@ -39,7 +33,7 @@ namespace DigipostClientLibWebapp.Controllers
 
         private SendModel GetSendModelFromSession()
         {
-            var searchDetails = SessionManager.GetFromSession<SearchDetails>(SessionConstants.PersonModel);
+            var searchDetails = SessionManager.GetFromSession<SearchDetails>(HttpContext, SessionConstants.PersonModel);
 
             SendModel sendModel = new SendModel();
             if (searchDetails != null)
@@ -47,7 +41,7 @@ namespace DigipostClientLibWebapp.Controllers
                 sendModel = Converter.SearchDetailsToSendModel(searchDetails);
             }
 
-            SessionManager.RemoveFromSession(SessionConstants.PersonModel);
+            SessionManager.RemoveFromSession(HttpContext, SessionConstants.PersonModel);
 
             return sendModel;
         }
@@ -121,6 +115,6 @@ namespace DigipostClientLibWebapp.Controllers
             }
 
             return hasError;
-        }
+        }       
     }
 }

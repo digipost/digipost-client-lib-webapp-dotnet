@@ -1,22 +1,24 @@
-﻿namespace DigipostClientLibWebapp.Utilities
+﻿using System.Web;
+
+namespace DigipostClientLibWebapp.Utilities
 {
     public static class SessionManager
     {
-        public static T GetFromSession<T>(string key)
+        public static T GetFromSession<T>(HttpContextBase Context,string key)
         {
-            var sessionData = System.Web.HttpContext.Current.Session[key];
+            var sessionData = Context.Session[key];
             
             return sessionData == null ? default(T) : (T) sessionData;
         }
 
-        public static void AddToSession<T>(string key, T value)
+        public static void AddToSession<T>(HttpContextBase Context,string key, T value)
         {
-            System.Web.HttpContext.Current.Session[key] = value;
+             Context.Session[key] = value;
         }
 
-        public static void RemoveFromSession(string key)
+        public static void RemoveFromSession(HttpContextBase Context,string key)
         {
-            System.Web.HttpContext.Current.Session.Remove(key);
+            Context.Session.Remove(key);
         }
     }
 }
