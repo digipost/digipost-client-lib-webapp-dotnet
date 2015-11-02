@@ -14,7 +14,7 @@ using log4net;
 
 namespace DigipostClientLibWebapp.Services.Digipost
 {
-    public class DigipostService
+    public class DigipostService : IDigipostService
     {
         static readonly ILog Logger = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
 
