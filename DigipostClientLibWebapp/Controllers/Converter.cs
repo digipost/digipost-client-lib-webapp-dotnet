@@ -33,6 +33,9 @@ namespace DigipostClientLibWebapp.Controllers
                 return "pdf";
             if (mimeType.Equals("text/plain", StringComparison.OrdinalIgnoreCase))
                 return "txt";
+            if(mimeType.Equals("text/html",StringComparison.OrdinalIgnoreCase))
+                return "html";
+
             return "";
         }
 
